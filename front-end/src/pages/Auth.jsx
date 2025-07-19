@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Auth.css';
-import googleLogo from '../assets/images/icons8-google-logo-48.png';
 
 const Auth = ({ initialMode = 'login', standalone }) => {
   const [rightPanelActive, setRightPanelActive] = useState(initialMode === 'register');
@@ -149,38 +148,29 @@ const Auth = ({ initialMode = 'login', standalone }) => {
 
         <div className="auth-form-container auth-sign-up-container">
           <form className="auth-form" onSubmit={handleSignup}>
-            <h1 className="auth-heading">Create Account</h1>
-            
             {/* User Type Selection */}
-            <div className="auth-user-type">
-              <label>
-                <input
-                  type="radio"
-                  name="userType"
-                  value="customer"
-                  checked={formData.userType === 'customer'}
-                  onChange={handleInputChange}
-                />
-                Customer
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="userType"
-                  value="salonOwner"
-                  checked={formData.userType === 'salonOwner'}
-                  onChange={handleInputChange}
-                />
-                Salon Owner
-              </label>
-            </div>
+            <label>
+              <input
+                type="radio"
+                name="userType"
+                value="customer"
+                checked={formData.userType === 'customer'}
+                onChange={handleInputChange}
+              />
+              Customer
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="userType"
+                value="salonOwner"
+                checked={formData.userType === 'salonOwner'}
+                onChange={handleInputChange}
+              />
+              Salon Owner
+            </label>
 
-            <div className="auth-social-container">
-              <a href="#" className="social" title="Google">
-                <img src={googleLogo} alt="Google logo" className="auth-google-logo" />
-              </a>
-            </div>
-            <span>or use your email for registration</span>
+            <span>Create your account</span>
             
             <input
               type="text"
@@ -214,7 +204,7 @@ const Auth = ({ initialMode = 'login', standalone }) => {
               onChange={handleInputChange}
               required
             />
-            <small style={{color: '#666', fontSize: '12px', marginTop: '-10px', marginBottom: '10px'}}>
+            <small className="auth-password-hint">
               Password must contain at least 6 characters with uppercase, lowercase, and number
             </small>
             <input
@@ -233,38 +223,29 @@ const Auth = ({ initialMode = 'login', standalone }) => {
         
         <div className="auth-form-container auth-sign-in-container">
           <form className="auth-form" onSubmit={handleLogin}>
-            <h1 className="auth-heading">Sign in</h1>
-            
             {/* User Type Selection */}
-            <div className="auth-user-type">
-              <label>
-                <input
-                  type="radio"
-                  name="userType"
-                  value="customer"
-                  checked={formData.userType === 'customer'}
-                  onChange={handleInputChange}
-                />
-                Customer
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="userType"
-                  value="salonOwner"
-                  checked={formData.userType === 'salonOwner'}
-                  onChange={handleInputChange}
-                />
-                Salon Owner
-              </label>
-            </div>
+            <label>
+              <input
+                type="radio"
+                name="userType"
+                value="customer"
+                checked={formData.userType === 'customer'}
+                onChange={handleInputChange}
+              />
+              Customer
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="userType"
+                value="salonOwner"
+                checked={formData.userType === 'salonOwner'}
+                onChange={handleInputChange}
+              />
+              Salon Owner
+            </label>
 
-            <div className="auth-social-container">
-              <a href="#" className="social" title="Google">
-                <img src={googleLogo} alt="Google logo" className="auth-google-logo" />
-              </a>
-            </div>
-            <span>or use your account</span>
+            <span>Sign in to your account</span>
             
             <input
               type="email"
@@ -288,6 +269,7 @@ const Auth = ({ initialMode = 'login', standalone }) => {
             </button>
           </form>
         </div>
+        
         <div className="auth-overlay-container">
           <div className="auth-overlay">
             <div className="auth-overlay-panel auth-overlay-left">
