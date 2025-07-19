@@ -1,6 +1,6 @@
 
 import React from 'react';
-import './Register.css';
+import '../styles/Register.css';
 import googleLogo from '../assets/images/icons8-google-logo-48.png';
 
 const Register = () => {

@@ -1,5 +1,7 @@
+
 import React, { useState, useEffect } from 'react';
-import './login.css';
+import '../styles/Login.css';
+import googleLogo from '../assets/images/icons8-google-logo-48.png';
 
 const Login = () => {
   const [isDark, setIsDark] = useState(false);
@@ -22,44 +24,35 @@ const Login = () => {
   };
 
   return (
-    <div className={`login-bg${isDark ? ' dark' : ''}`}>
-      <div className="login-container">
-        <h2 className="login-title">Login</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="login-field">
-            <label className="login-label">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              className="login-input"
-            />
-          </div>
-          <div className="login-field">
-            <label className="login-label">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              className="login-input"
-            />
-          </div>
-          <button
-            type="submit"
-            className="login-btn"
-          >
-            Login
-          </button>
+    <div className="login-container">
+      <div className="login-box">
+        <div className="login-title">Login</div>
+        <form className="login-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            required
+            placeholder="Email"
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            required
+            placeholder="Password"
+          />
+          <button type="submit">Login</button>
         </form>
-        <div className="login-signup">
+        <div className="divider">or</div>
+        <button className="google-btn">
+          <img src={googleLogo} alt="Google logo" />
+          Sign in with Google
+        </button>
+        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
           <span>Don't have an account?</span>
           <br />
-          <a
-            href="#signup"
-            className="signup-link"
-          >
+          <a href="#signup" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 500 }}>
             Sign Up
           </a>
         </div>
