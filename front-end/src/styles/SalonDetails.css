@@ -1,0 +1,295 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800');
+
+/* Salon Details Container */
+.salon-details-container {
+  padding: 1rem 2rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Salon Details Card */
+.salon-details-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(59,130,246,0.08);
+  padding: 1.5rem;
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid rgba(59,130,246,0.05);
+}
+
+/* Left Side - Salon Details Info */
+.salon-details-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+/* Salon Status */
+.salon-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-indicator {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.status-indicator.open {
+  color: #22c55e;
+  animation: pulse 2s infinite;
+}
+
+.status-indicator.closed {
+  color: #ef4444;
+}
+
+.status-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* Salon Name */
+.salon-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #232336;
+  margin: 0;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Salon Rating */
+.salon-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.rating-stars {
+  color: #fbbf24;
+  font-size: 1rem;
+}
+
+.rating-number {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* Salon Address */
+.salon-address {
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Salon Services */
+.salon-services {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.services-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.services-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.service-tag {
+  background: rgba(59,130,246,0.1);
+  color: #3b82f6;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border: 1px solid rgba(59,130,246,0.2);
+}
+
+.service-tag.more {
+  background: rgba(107,114,128,0.1);
+  color: #6b7280;
+  border-color: rgba(107,114,128,0.2);
+}
+
+/* View Details Button */
+.view-details-btn {
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.15);
+  margin-top: 0.5rem;
+  align-self: flex-start;
+}
+
+.view-details-btn:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+  box-shadow: 0 4px 16px rgba(59,130,246,0.25);
+  transform: translateY(-1px);
+}
+
+.view-details-btn:active {
+  transform: translateY(0);
+}
+
+/* Right Side - Salon Image */
+.salon-image-container {
+  flex-shrink: 0;
+  width: 200px;
+  height: 150px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  border: 1px solid rgba(59,130,246,0.1);
+}
+
+.salon-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.salon-image:hover {
+  transform: scale(1.05);
+}
+
+/* Pulse Animation for Open Status */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .salon-details-container {
+    padding: 1rem;
+  }
+  
+  .salon-details-card {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem;
+  }
+  
+  .salon-image-container {
+    width: 100%;
+    height: 180px;
+    order: -1;
+  }
+  
+  .salon-name {
+    font-size: 1.3rem;
+  }
+  
+  .view-details-btn {
+    align-self: stretch;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .salon-details-container {
+    padding: 0.5rem;
+  }
+  
+  .salon-details-card {
+    padding: 1rem;
+  }
+  
+  .salon-name {
+    font-size: 1.2rem;
+  }
+  
+  .services-tags {
+    gap: 0.3rem;
+  }
+  
+  .service-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .salon-details-card {
+    background: #232336;
+    color: #e0e7ff;
+    border-color: rgba(139,92,246,0.15);
+  }
+  
+  .salon-name {
+    color: #e0e7ff;
+  }
+  
+  .status-text {
+    color: #a1a1aa;
+  }
+  
+  .rating-number {
+    color: #a1a1aa;
+  }
+  
+  .salon-address {
+    color: #a1a1aa;
+  }
+  
+  .services-label {
+    color: #a1a1aa;
+  }
+  
+  .service-tag {
+    background: rgba(139,92,246,0.15);
+    color: #8b5cf6;
+    border-color: rgba(139,92,246,0.3);
+  }
+  
+  .service-tag.more {
+    background: rgba(107,114,128,0.15);
+    color: #9ca3af;
+    border-color: rgba(107,114,128,0.3);
+  }
+  
+  .view-details-btn {
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+  }
+  
+  .view-details-btn:hover {
+    background: linear-gradient(90deg, #312e81 0%, #7c3aed 100%);
+  }
+  
+  .salon-image-container {
+    border-color: rgba(139,92,246,0.2);
+  }
+} 
