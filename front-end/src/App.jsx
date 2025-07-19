@@ -5,7 +5,12 @@ import SearchDashboard from './pages/SearchDashboard';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 import LandingPage from './pages/LandingPage';
+<<<<<<< HEAD
 import Contact from './pages/Contact';
+=======
+import ShopRegistration from './pages/ShopRegistration';
+import AdminPanel from './pages/AdminPanel';
+>>>>>>> 1d176efb451ca8ae73b9c5b8dbb7154403e59af2
 
 function AppRoutes() {
   const location = useLocation();
@@ -17,9 +22,14 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Auth initialMode='login' standalone />} />
         <Route path="/register" element={<Auth initialMode='register' standalone />} />
+        <Route path="/shop-registration" element={<ShopRegistration />} />
         <Route path="/search" element={<SearchDashboard />} />
         <Route path="/user-profile" element={<UserProfile />} />
+<<<<<<< HEAD
         <Route path="/contact" element={<Contact />} />
+=======
+        <Route path="/admin" element={<AdminPanel />} />
+>>>>>>> 1d176efb451ca8ae73b9c5b8dbb7154403e59af2
       </Routes>
     </>
   );

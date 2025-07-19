@@ -1,0 +1,377 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+.admin-profile-root {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(59,130,246,0.08);
+  padding: 1.2rem 1.1rem;
+  width: 96%;
+  height: 100%;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0;
+  margin-left: 1rem;
+}
+
+.admin-profile-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 0.7rem;
+}
+.admin-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.admin-profile-avatar svg {
+  color: #fff;
+}
+
+.admin-profile-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+}
+
+.admin-profile-details {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.admin-profile-section {
+  background: rgba(59,130,246,0.03);
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 1px solid rgba(59,130,246,0.08);
+}
+
+.admin-profile-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #3b82f6;
+  margin-bottom: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-profile-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(59,130,246,0.05);
+}
+
+.admin-profile-field:last-child {
+  border-bottom: none;
+}
+
+.admin-profile-label {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 0.95rem;
+  min-width: 120px;
+}
+
+.admin-profile-value {
+  font-weight: 500;
+  color: #232336;
+  font-size: 0.95rem;
+  text-align: right;
+  max-width: 60%;
+  word-wrap: break-word;
+}
+
+.admin-profile-info {
+  text-align: center;
+}
+.admin-profile-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #232336;
+  margin-bottom: 0.2rem;
+}
+.admin-profile-email {
+  font-size: 1.02rem;
+  color: #6b7280;
+}
+
+.admin-profile-settings-btn {
+  margin-top: 0.8rem;
+  padding: 0.6rem 1.3rem;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.07);
+}
+.admin-profile-settings-btn:hover, .admin-profile-settings-btn:focus {
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+  box-shadow: 0 4px 16px rgba(59,130,246,0.13);
+}
+
+.admin-profile-live-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.admin-profile-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-profile-status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+.admin-profile-status-indicator.live .admin-profile-status-dot {
+  background: #22c55e;
+  box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+}
+
+.admin-profile-status-indicator.offline .admin-profile-status-dot {
+  background: #6b7280;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+.admin-profile-status-text {
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-profile-status-indicator.live .admin-profile-status-text {
+  color: #22c55e;
+}
+
+.admin-profile-status-indicator.offline .admin-profile-status-text {
+  color: #6b7280;
+}
+
+.admin-profile-live-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-profile-go-live-btn {
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+}
+
+.admin-profile-go-live-btn:hover {
+  background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+  box-shadow: 0 4px 16px rgba(34,197,94,0.25);
+}
+
+.admin-profile-end-live-btn {
+  background: linear-gradient(90deg, #ef4444 0%, #f87171 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, box-shadow 0.18s;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.15);
+}
+
+.admin-profile-end-live-btn:hover {
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%);
+  box-shadow: 0 4px 16px rgba(239,68,68,0.25);
+}
+
+.admin-profile-input {
+  background: rgba(59,130,246,0.05);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.95rem;
+  color: #232336;
+  font-family: 'Montserrat', sans-serif;
+  width: 60%;
+  max-width: 200px;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+
+.admin-profile-input:focus {
+  outline: none;
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.admin-profile-textarea {
+  background: rgba(59,130,246,0.05);
+  border: 1px solid rgba(59,130,246,0.15);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.95rem;
+  color: #232336;
+  font-family: 'Montserrat', sans-serif;
+  width: 60%;
+  max-width: 200px;
+  resize: vertical;
+  min-height: 60px;
+  transition: border 0.18s, box-shadow 0.18s;
+}
+
+.admin-profile-textarea:focus {
+  outline: none;
+  border: 1px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+}
+
+.admin-profile-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.admin-profile-save-btn {
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.3rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(34,197,94,0.15);
+}
+
+.admin-profile-save-btn:hover {
+  background: linear-gradient(90deg, #16a34a 0%, #22c55e 100%);
+  box-shadow: 0 4px 16px rgba(34,197,94,0.25);
+}
+
+.admin-profile-cancel-btn {
+  background: linear-gradient(90deg, #6b7280 0%, #9ca3af 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 0.6rem 1.3rem;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(107,114,128,0.15);
+}
+
+.admin-profile-cancel-btn:hover {
+  background: linear-gradient(90deg, #4b5563 0%, #6b7280 100%);
+  box-shadow: 0 4px 16px rgba(107,114,128,0.25);
+}
+
+@media (max-width: 600px) {
+  .admin-profile-root {
+    padding: 1.2rem 0.7rem;
+    max-width: 98vw;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .admin-profile-root {
+    background: #232336;
+    color: #e0e7ff;
+  }
+  .admin-profile-section {
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.15);
+  }
+  .admin-profile-section-title {
+    color: #8b5cf6;
+  }
+  .admin-profile-label {
+    color: #a1a1aa;
+  }
+  .admin-profile-value {
+    color: #e0e7ff;
+  }
+  .admin-profile-name {
+    color: #e0e7ff;
+  }
+  .admin-profile-email {
+    color: #a1a1aa;
+  }
+  .admin-profile-settings-btn {
+    background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+  }
+  .admin-profile-settings-btn:hover, .admin-profile-settings-btn:focus {
+    background: linear-gradient(90deg, #312e81 0%, #7c3aed 100%);
+  }
+  .admin-profile-status-indicator.offline .admin-profile-status-text {
+    color: #a1a1aa;
+  }
+  .admin-profile-status-indicator.offline .admin-profile-status-dot {
+    background: #a1a1aa;
+  }
+  .admin-profile-input {
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: #e0e7ff;
+  }
+  .admin-profile-input:focus {
+    border: 1px solid #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+  }
+  .admin-profile-textarea {
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.2);
+    color: #e0e7ff;
+  }
+  .admin-profile-textarea:focus {
+    border: 1px solid #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139,92,246,0.15);
+  }
+} 
