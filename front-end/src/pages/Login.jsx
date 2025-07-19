@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
 import './login.css';
 
@@ -71,5 +70,3 @@ const Login = () => {
 
 
 export default Login;
-=======
->>>>>>> 29bebe4ac5bdce5fd82f73b0c5fcff2c09f4b929
