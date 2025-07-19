@@ -12,6 +12,9 @@ const Navbar = () => {
       <div className={`navbar-links${open ? ' open' : ''}`}>
         <Link to="/" onClick={() => setOpen(false)}>Home</Link>
         <Link to="/contact" onClick={() => setOpen(false)}>Contact</Link>
+        <Link to="/admin" className="navbar-admin-btn" onClick={() => setOpen(false)}>
+          Admin Panel
+        </Link>
         <div className="navbar-auth-group">
           <Link to="/login" className="navbar-login-btn" onClick={() => setOpen(false)}>
             Login

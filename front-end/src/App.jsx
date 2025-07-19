@@ -6,6 +6,7 @@ import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 import LandingPage from './pages/LandingPage';
 import ShopRegistration from './pages/ShopRegistration';
+import AdminPanel from './pages/AdminPanel';
 
 function AppRoutes() {
   const location = useLocation();
@@ -20,6 +21,7 @@ function AppRoutes() {
         <Route path="/shop-registration" element={<ShopRegistration />} />
         <Route path="/search" element={<SearchDashboard />} />
         <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </>
   );
