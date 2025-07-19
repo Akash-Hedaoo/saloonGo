@@ -1,0 +1,140 @@
+/* Default styles (light mode) */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.user-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 20px;
+}
+
+.user-profile-card {
+  background-color: #dadada; /* Light card */
+  color: #000000;            /* Light text */
+  border-radius: 10px;
+  padding: 40px;
+  width: 800px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.user-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-profile-header h2 {
+  font-size: 24px;
+  margin: 0;
+  color: inherit;
+}
+
+.user-profile-header p {
+  color: #6b7280;
+  margin: 2px 0 0;
+  font-size: 14px;
+}
+
+.user-details h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 5px;
+  color: inherit;
+}
+
+.user-details p {
+  font-size: 16px;
+  margin: 8px 0;
+  color: inherit;
+}
+
+.user-profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.edit-button,
+.logout-button {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.edit-button {
+  background-color: #f3f4f6;
+  color: #111827;
+}
+
+.edit-button:hover {
+  background-color: #e5e7eb;
+}
+
+.logout-button {
+  background-color: #2563eb;
+  color: white;
+}
+
+.logout-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* DARK MODE STYLES */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #000000;
+  }
+
+  .user-profile-container {
+    background-color: #000000;
+  }
+
+  .user-profile-card {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+  }
+
+  .user-profile-header p,
+  .user-details p {
+    color: #cccccc;
+  }
+
+  .edit-button {
+    background-color: #333333;
+    color: #ffffff;
+  }
+
+  .edit-button:hover {
+    background-color: #444444;
+  }
+
+  .logout-button {
+    background-color: #3b82f6;
+  }
+
+  .logout-button:hover {
+    background-color: #2563eb;
+  }
+}
