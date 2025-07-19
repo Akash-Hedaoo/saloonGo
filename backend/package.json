@@ -1,17 +1,26 @@
 {
-  "name": "saloongo",
+  "name": "saloongo-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Backend API for SaloonGo - Salon booking platform",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "node test.js",
+    "setup": "node setup.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/siddhi070306/saloonGo.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "salon",
+    "booking",
+    "api",
+    "firebase",
+    "express"
+  ],
+  "author": "SaloonGo Team",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
@@ -19,10 +28,20 @@
   },
   "homepage": "https://github.com/siddhi070306/saloonGo#readme",
   "dependencies": {
+    "axios": "^1.10.0",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
     "express": "^5.1.0",
-    "firebase-admin": "^13.4.0"
+    "firebase-admin": "^13.4.0",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }

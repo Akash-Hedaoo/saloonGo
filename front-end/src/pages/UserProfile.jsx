@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { userAPI } from '../services/api';
 import '../styles/UserProfile.css';
 
 const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user, logout } = useAuth();
   
   // User data state
   const [userData, setUserData] = useState({
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+91-9876543210',
-    joinDate: 'January 2024',
-    avatar: 'https://i.pravatar.cc/150?img=3',
-    totalBookings: 12,
-    favoriteServices: ['Haircut', 'Shave', 'Facial']
+    name: user?.name || '',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    joinDate: user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : 'Recently',
+    avatar: user?.profileImage || 'https://i.pravatar.cc/150?img=3',
+    totalBookings: 0,
+    favoriteServices: []
   });
 
   // Editable form state
@@ -26,14 +30,68 @@ const UserProfile = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    // Update user data with form data
-    setUserData(prev => ({
-      ...prev,
-      ...formData
-    }));
-    setIsEditing(false);
-    console.log('Profile saved:', formData);
+  // Load user profile data on component mount
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      if (user) {
+        try {
+          setIsLoading(true);
+          let response;
+          if (user.role === 'customer') {
+            response = await userAPI.getCustomerProfile();
+          } else {
+            response = await userAPI.getSalonProfile();
+          }
+          
+          const profileData = response.data;
+          setUserData(prev => ({
+            ...prev,
+            name: profileData.name || user.name,
+            email: profileData.email || user.email,
+            phone: profileData.phone || user.phone,
+            avatar: profileData.profileImage || user.profileImage || prev.avatar,
+            joinDate: profileData.createdAt ? new Date(profileData.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long' }) : prev.joinDate
+          }));
+        } catch (error) {
+          console.error('Error loading profile:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadUserProfile();
+  }, [user]);
+
+  const handleSave = async () => {
+    try {
+      setIsLoading(true);
+      const updateData = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone
+      };
+
+      let response;
+      if (user.role === 'customer') {
+        response = await userAPI.updateCustomerProfile(updateData);
+      } else {
+        response = await userAPI.updateSalonProfile(updateData);
+      }
+
+      // Update user data with form data
+      setUserData(prev => ({
+        ...prev,
+        ...formData
+      }));
+      setIsEditing(false);
+      console.log('Profile saved:', response.data);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+      alert('Failed to save profile. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -46,10 +104,8 @@ const UserProfile = () => {
     setIsEditing(false);
   };
 
-  const handleSignout = () => {
-    // Handle signout logic
-    console.log('User signed out');
-    // Add navigation to login page or clear session
+  const handleSignout = async () => {
+    await logout();
   };
 
   const handleInputChange = (field, value) => {
@@ -134,21 +190,22 @@ const UserProfile = () => {
 
         {/* Action Buttons */}
         <div className="user-profile-actions">
+          {isLoading && <div className="user-profile-loading">Loading...</div>}
           {isEditing ? (
             <>
-              <button className="user-profile-save-btn" onClick={handleSave}>
-                Save Changes
+              <button className="user-profile-save-btn" onClick={handleSave} disabled={isLoading}>
+                {isLoading ? 'Saving...' : 'Save Changes'}
               </button>
-              <button className="user-profile-cancel-btn" onClick={handleCancel}>
+              <button className="user-profile-cancel-btn" onClick={handleCancel} disabled={isLoading}>
                 Cancel
               </button>
             </>
           ) : (
             <>
-              <button className="user-profile-edit-btn" onClick={handleEdit}>
+              <button className="user-profile-edit-btn" onClick={handleEdit} disabled={isLoading}>
                 Edit Profile
               </button>
-              <button className="user-profile-signout-btn" onClick={handleSignout}>
+              <button className="user-profile-signout-btn" onClick={handleSignout} disabled={isLoading}>
                 Sign Out
               </button>
             </>

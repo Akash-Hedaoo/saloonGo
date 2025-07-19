@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import SearchDashboard from './pages/SearchDashboard';
 import UserProfile from './pages/UserProfile';
@@ -23,9 +25,17 @@ function AppRoutes() {
         <Route path="/register" element={<Auth initialMode='register' standalone />} />
         <Route path="/shop-registration" element={<ShopRegistration />} />
         <Route path="/search" element={<SearchDashboard />} />
-        <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/user-profile" element={
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        } />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin" element={
+          <ProtectedRoute requiredRole="admin">
+            <AdminPanel />
+          </ProtectedRoute>
+        } />
         <Route path="/appointment-booking" element={<AppointmentBooking />} />
         <Route path="/salon-details" element={<SalonDetails />} />
       </Routes>
@@ -35,9 +45,11 @@ function AppRoutes() {
 
 const App = () => {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppRoutes/>
+      </Router>
+    </AuthProvider>
   );
 };
 

@@ -1,21 +1,67 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const authRoutes = require("./routes/authRoutes"); // ✅ only this once
+const config = require('./config/config');
+
+// Import routes
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
-require("dotenv").config();
 
-app.use(cors());
-app.use(bodyParser.json());
+// Middleware
+app.use(cors({
+  origin: config.corsOrigin,
+  credentials: true
+}));
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
 
-// ✅ Mount auth routes at /api/auth
-app.use('/api/auth', authRoutes); 
-// React can now send requests to:
-// - POST /api/auth/signup/customer
-// - POST /api/auth/signup/salonOwner
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+  next();
+});
 
-const PORT = process.env.PORT || 5000;
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    environment: config.nodeEnv,
+    firebaseProject: config.firebaseProjectId
+  });
+});
+
+// Mount routes
+app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
+
+// 404 handler
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Route not found' });
+});
+
+// Error handling middleware
+app.use((error, req, res, next) => {
+  console.error('Error:', error);
+  
+  if (error.name === 'ValidationError') {
+    return res.status(400).json({ error: error.message });
+  }
+  
+  if (error.name === 'MulterError') {
+    return res.status(400).json({ error: 'File upload error' });
+  }
+  
+  res.status(500).json({ error: 'Internal server error' });
+});
+
+const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📊 Health check: http://localhost:${PORT}/health`);
+  console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
+  console.log(`👤 User endpoints: http://localhost:${PORT}/api/user`);
+  console.log(`🔥 Firebase Project: ${config.firebaseProjectId}`);
 });
