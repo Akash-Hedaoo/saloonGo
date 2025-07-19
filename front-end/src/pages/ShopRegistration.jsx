@@ -12,8 +12,6 @@ const ShopRegistration = () => {
     phoneNumber: '',
     servicesOffered: '',
     openHours: '',
-    locationLat: '',
-    locationLng: '',
     profileImage: null,
     role: 'salonOwner',
   });
@@ -110,24 +108,6 @@ const ShopRegistration = () => {
             value={form.openHours}
             onChange={handleChange}
           />
-          <div className="shopreg-location-fields">
-            <input
-              type="text"
-              name="locationLat"
-              placeholder="Latitude"
-              value={form.locationLat}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="text"
-              name="locationLng"
-              placeholder="Longitude"
-              value={form.locationLng}
-              onChange={handleChange}
-              required
-            />
-          </div>
           <input
             type="hidden"
             name="role"

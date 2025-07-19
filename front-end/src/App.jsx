@@ -8,6 +8,7 @@ import LandingPage from './pages/LandingPage';
 import Contact from './pages/Contact';
 import ShopRegistration from './pages/ShopRegistration';
 import AdminPanel from './pages/AdminPanel';
+import AppointmentBooking from './pages/AppointmentBooking';
 
 function AppRoutes() {
   const location = useLocation();
@@ -24,6 +25,7 @@ function AppRoutes() {
         <Route path="/user-profile" element={<UserProfile />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/appointment-booking" element={<AppointmentBooking />} />
       </Routes>
     </>
   );

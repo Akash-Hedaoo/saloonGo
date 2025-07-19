@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/LandingPage.css";
 import landingpageimg from "../assets/images/landingpagephoto.jpg";
 
@@ -8,6 +8,7 @@ const LandingPage = () => {
   const featuresRef = useRef(null);
   const statsRef = useRef(null);
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const observerOptions = {
@@ -31,8 +32,8 @@ const LandingPage = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Implement search logic or navigation here
-    alert(`Searching for: ${search}`);
+    // Navigate to appointment booking page
+    navigate('/appointment-booking');
   };
 
   return (
@@ -78,7 +79,7 @@ const LandingPage = () => {
             instant notifications, and seamless appointments.
           </p>
           <div className="hero-actions">
-            <Link to="/search" className="cta-button primary">
+            <Link to="/appointment-booking" className="cta-button primary">
               <span>Start Booking</span>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -225,7 +226,7 @@ const LandingPage = () => {
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </Link>
-            <Link to="/search" className="cta-button secondary">
+            <Link to="/appointment-booking" className="cta-button secondary">
               <span>Explore Salons</span>
             </Link>
           </div>
