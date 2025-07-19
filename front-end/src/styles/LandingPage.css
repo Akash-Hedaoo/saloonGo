@@ -1,0 +1,24 @@
+.image-container img {
+  height:80vh;
+    width:100%;
+    position: relative;
+    overflow: hidden;
+    object-fit: cover;
+}
+.imgtext{
+    position : absolute;
+     top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+}
+.imgtext h1{
+    font-size: 70px;
+    letter-spacing: 1px;
+
+
+
+}
+.imgtext h4{
+    font-weight: 100;
+}
