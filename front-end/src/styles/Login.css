@@ -75,3 +75,6 @@
   width: 20px;
   height: 20px;
 }
+button:hover {
+    background-color: rgb(105, 1, 102);
+  }
