@@ -1,5 +1,7 @@
 
+
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Login.css';
 import googleLogo from '../assets/images/icons8-google-logo-48.png';
 
@@ -52,9 +54,9 @@ const Login = () => {
         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
           <span>Don't have an account?</span>
           <br />
-          <a href="#signup" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 500 }}>
+          <Link to="/register" style={{ color: '#007bff', textDecoration: 'none', fontWeight: 500 }}>
             Sign Up
-          </a>
+          </Link>
         </div>
       </div>
     </div>
