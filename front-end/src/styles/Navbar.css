@@ -1,8 +1,9 @@
+/* === Base (light mode) === */
 .navbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: transparent;
+  background: #ffffff;
   padding: 0.75rem 1.5rem;
   box-shadow: none;
   position: relative;
@@ -10,9 +11,9 @@
 }
 
 .navbar-logo {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
-  color: #a500a0ff;
+  color: #111111;
   letter-spacing: 1px;
 }
 
@@ -22,14 +23,14 @@
 }
 
 .navbar-links a {
-  color: #f0efef;
+  color: #333333;
   text-decoration: none;
   font-weight: 100;
   transition: color 0.2s;
 }
 
 .navbar-links a:hover {
-  color: #a500a0ff;
+  color: #a500a0;
 }
 
 .navbar-hamburger {
@@ -43,7 +44,7 @@
 .navbar-hamburger span {
   width: 28px;
   height: 3px;
-  background: #a500a0ff;
+  background: #a500a0;
   border-radius: 2px;
   display: block;
   transition: 0.3s;
@@ -54,18 +55,20 @@
     position: absolute;
     top: 60px;
     right: 0;
-    background: rgba(61, 60, 60, 0.95);
+    background: #f8f8f8;
     flex-direction: column;
     width: 200px;
     gap: 1.2rem;
     padding: 1.2rem 1.5rem;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.1);
     border-radius: 0 0 12px 12px;
     display: none;
   }
+
   .navbar-links.open {
     display: flex;
   }
+
   .navbar-hamburger {
     display: flex;
   }
@@ -79,4 +82,35 @@
 }
 .navbar-hamburger.open span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
+}
+
+
+/* === Dark Mode === */
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background: #121212;
+  }
+
+  .navbar-logo {
+    color: #ffffff;
+  }
+
+  .navbar-links a {
+    color: #e0e0e0;
+  }
+
+  .navbar-links a:hover {
+    color: #bb86fc;
+  }
+
+  .navbar-hamburger span {
+    background: #bb86fc;
+  }
+
+  @media (max-width: 900px) {
+    .navbar-links {
+      background: #1e1e1e;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, 0.3);
+    }
+  }
 }
