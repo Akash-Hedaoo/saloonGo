@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/LandingPage.css";
 import landingpageimg from "../assets/images/landingpagephoto.jpg";
@@ -7,6 +7,7 @@ const LandingPage = () => {
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const statsRef = useRef(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const observerOptions = {
@@ -28,6 +29,12 @@ const LandingPage = () => {
     return () => observer.disconnect();
   }, []);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // Implement search logic or navigation here
+    alert(`Searching for: ${search}`);
+  };
+
   return (
     <div className="landing-page-container">
       {/* Premium Hero Section */}
@@ -46,9 +53,22 @@ const LandingPage = () => {
         </div>
         
         <div className="hero-content">
-          <div className="hero-badge">
-            <span>✨ Premium Salon Experience</span>
-          </div>
+          {/* Minimal Search Bar */}
+          <form className="minimal-search-bar" onSubmit={handleSearch}>
+            <input
+              type="text"
+              className="minimal-search-input"
+              placeholder="Search salons..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+            <button type="submit" className="minimal-search-btn" tabIndex={-1}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </button>
+          </form>
           <h1 className="hero-title">
             <span className="title-line">Transform Your</span>
             <span className="title-line highlight">Salon Journey</span>

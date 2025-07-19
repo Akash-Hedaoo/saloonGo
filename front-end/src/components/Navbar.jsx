@@ -16,9 +16,6 @@ const Navbar = () => {
           <Link to="/login" className="navbar-login-btn" onClick={() => setOpen(false)}>
             Login
           </Link>
-          <Link to="/register" className="navbar-register-btn" onClick={() => setOpen(false)}>
-            Register
-          </Link>
           <Link to="/user-profile" className="navbar-profile-icon" onClick={() => setOpen(false)} title="Profile">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="8" r="4" />
