@@ -40,14 +40,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await authAPI.signupCustomer(userData);
-      const { accessToken, refreshToken, user } = response.data;
+      const { token, refreshToken, user } = response.data;
       
-      setAuthTokens(accessToken, refreshToken);
+      setAuthTokens(token, refreshToken);
       setUser(user);
       
       return { success: true, user };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Signup failed';
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Signup failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -58,14 +58,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await authAPI.signupSalonOwner(userData);
-      const { accessToken, refreshToken, user } = response.data;
+      const { token, refreshToken, salon } = response.data;
       
-      setAuthTokens(accessToken, refreshToken);
-      setUser(user);
+      setAuthTokens(token, refreshToken);
+      setUser(salon);
       
-      return { success: true, user };
+      return { success: true, user: salon };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Signup failed';
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Signup failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -76,14 +76,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await authAPI.loginCustomer(credentials);
-      const { accessToken, refreshToken, user } = response.data;
+      const { token, refreshToken, user } = response.data;
       
-      setAuthTokens(accessToken, refreshToken);
+      setAuthTokens(token, refreshToken);
       setUser(user);
       
       return { success: true, user };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Login failed';
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Login failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -94,14 +94,14 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
       const response = await authAPI.loginSalonOwner(credentials);
-      const { accessToken, refreshToken, user } = response.data;
+      const { token, refreshToken, salon } = response.data;
       
-      setAuthTokens(accessToken, refreshToken);
-      setUser(user);
+      setAuthTokens(token, refreshToken);
+      setUser(salon);
       
-      return { success: true, user };
+      return { success: true, user: salon };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Login failed';
+      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Login failed';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }

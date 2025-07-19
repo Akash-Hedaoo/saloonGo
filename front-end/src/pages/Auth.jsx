@@ -49,13 +49,35 @@ const Auth = ({ initialMode = 'login', standalone }) => {
       return;
     }
 
+    // Check password strength
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{6,}$/;
+    if (!passwordRegex.test(formData.password)) {
+      alert('Password must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number');
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      const userData = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone
-      };
+      let userData;
+      if (formData.userType === 'customer') {
+        userData = {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone
+        };
+      } else {
+        userData = {
+          fullName: formData.name,
+          email: formData.email,
+          password: formData.password,
+          salonName: formData.name + "'s Salon", // Default salon name
+          salonAddress: "Address to be updated",
+          phoneNumber: formData.phone,
+          servicesOffered: ["Haircut", "Styling"], // Default services
+          role: 'salonOwner'
+        };
+      }
 
       let result;
       if (formData.userType === 'customer') {
@@ -192,6 +214,9 @@ const Auth = ({ initialMode = 'login', standalone }) => {
               onChange={handleInputChange}
               required
             />
+            <small style={{color: '#666', fontSize: '12px', marginTop: '-10px', marginBottom: '10px'}}>
+              Password must contain at least 6 characters with uppercase, lowercase, and number
+            </small>
             <input
               type="password"
               name="confirmPassword"
