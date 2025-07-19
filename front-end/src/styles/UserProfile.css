@@ -30,7 +30,7 @@ body {
   gap: 20px;
   border-bottom: 1px solid #e5e7eb;
   padding-bottom: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 .user-avatar {
@@ -54,22 +54,23 @@ body {
 
 .user-details h3 {
   font-size: 18px;
-  margin-bottom: 15px;
+  margin-bottom: 19px;
   border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 5px;
+  padding-bottom: 15px;
   color: inherit;
 }
 
 .user-details p {
   font-size: 16px;
-  margin: 8px 0;
+  margin: 15px 0;
   color: inherit;
+  
 }
 
 .user-profile-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 30px;
 }
 
 .edit-button,
@@ -102,39 +103,37 @@ body {
 
 /* DARK MODE STYLES */
 @media (prefers-color-scheme: dark) {
-  body {
-    background-color: #000000;
-  }
-
+  
   .user-profile-container {
-    background-color: #000000;
+    background-color: #181818;
   }
 
   .user-profile-card {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
+    background-color: #232323;
   }
 
-  .user-profile-header p,
-  .user-details p {
-    color: #cccccc;
+  .user-profile-header h2,p,
+  .user-details h3 {
+    color: white;
+  }
+  .user-details p{
+    color: white;
   }
 
   .edit-button {
-    background-color: #333333;
+    background-color: #387eee;
     color: #ffffff;
   }
 
   .edit-button:hover {
-    background-color: #444444;
+    background-color: #024077;
   }
 
   .logout-button {
-    background-color: #3b82f6;
+    background-color: #a500a0ff;
   }
 
   .logout-button:hover {
-    background-color: #2563eb;
+    background-color: rgb(105, 1, 102);
   }
 }
