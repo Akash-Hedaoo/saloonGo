@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../styles/FilterSidebar.css';
 
-const FilterSidebar = () => {
+const FilterSidebar = ({ inlineToggle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filters, setFilters] = useState({
     rating: '',
@@ -39,9 +39,11 @@ const FilterSidebar = () => {
     <>
       {/* Toggle Button */}
       <button 
-        className={`filter-toggle-btn ${isOpen ? 'active' : ''}`}
+        className={`filter-toggle-btn${inlineToggle ? ' inline' : ''}${isOpen ? ' active' : ''}`}
         onClick={toggleSidebar}
         aria-label="Toggle filters"
+        type="button"
+        style={inlineToggle ? { position: 'static', marginLeft: '12px' } : {}}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3"/>
@@ -58,7 +60,7 @@ const FilterSidebar = () => {
       <div className={`filter-sidebar ${isOpen ? 'open' : ''}`}>
         <div className="filter-header">
           <h3>Filters</h3>
-          <button className="close-btn" onClick={toggleSidebar}>
+          <button className="close-btn" onClick={toggleSidebar} type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -160,10 +162,10 @@ const FilterSidebar = () => {
 
         {/* Filter Actions */}
         <div className="filter-actions">
-          <button className="clear-filters-btn" onClick={clearFilters}>
+          <button className="clear-filters-btn" onClick={clearFilters} type="button">
             Clear All
           </button>
-          <button className="apply-filters-btn" onClick={applyFilters}>
+          <button className="apply-filters-btn" onClick={applyFilters} type="button">
             Apply Filters
           </button>
         </div>
