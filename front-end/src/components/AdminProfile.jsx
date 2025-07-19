@@ -22,7 +22,8 @@ const AdminProfile = ({
     salonAddress: salonAddress,
     phoneNumber: phoneNumber,
     servicesOffered: servicesOffered,
-    openHours: openHours
+    openHours: openHours,
+    profileImage: profileImage
   });
 
   const handleGoLive = () => {
@@ -56,7 +57,8 @@ const AdminProfile = ({
       salonAddress: salonAddress,
       phoneNumber: phoneNumber,
       servicesOffered: servicesOffered,
-      openHours: openHours
+      openHours: openHours,
+      profileImage: profileImage
     });
     setIsEditing(false);
   };
@@ -70,13 +72,18 @@ const AdminProfile = ({
 
   return (
     <div className="admin-profile-root">
-      <h2 className="admin-profile-heading">Shop Owner Profile</h2>
-      
-      <div className="admin-profile-avatar">
-        {profileImage ? (
-          <img src={profileImage} alt="Profile" />
+      {/* Remove heading, replace avatar with full-width image */}
+      <div className="admin-profile-image-container">
+        {formData.profileImage ? (
+          <img
+            src={formData.profileImage}
+            alt="Profile"
+            className="admin-profile-full-image"
+          />
         ) : (
-          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4"/></svg>
+          <div className="admin-profile-image-placeholder">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-2.5 3.5-4 8-4s8 1.5 8 4"/></svg>
+          </div>
         )}
       </div>
 
