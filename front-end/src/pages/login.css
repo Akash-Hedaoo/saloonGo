@@ -1,0 +1,112 @@
+.login-bg {
+  min-height: 100vh;
+  background-color: #dadada;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  width: 350px;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-field {
+  margin-bottom: 1rem;
+}
+
+.login-label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 16px;
+  border: 1px solid #ccc;
+}
+
+.login-btn {
+  width: 105%;
+  padding: 0.75rem;
+  background: #a500a0ff;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-signup {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #555;
+}
+
+.signup-link {
+  color: #0b5fe4ff;
+  text-decoration: underline;
+  font-weight: bold;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+.login-bg.dark {
+  background-color: #181818;
+}
+
+.login-container.dark {
+  background-color: #232323;
+  color: #eee;
+}
+
+.login-bg.dark .login-container {
+  background-color: #232323;
+  color: #eee;
+}
+
+.login-bg.dark .login-title,
+.login-bg.dark .login-label,
+.login-bg.dark .login-signup {
+  color: #eee;
+}
+
+.login-bg.dark .login-input {
+  background: #181818;
+  color: #eee;
+  border: 1px solid #444;
+}
+
+.login-bg.dark .login-btn {
+  background: #4a006e;
+}
+
+.login-bg.dark .signup-link {
+  color: #7abfff;
+}
+
+.dark-toggle {
+  background: none;
+  border: none;
+  color: #a500a0ff;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  align-self: flex-end;
+}
+
+.login-bg.dark .dark-toggle {
+  color: #eee;
+}

@@ -1,7 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 const UserProfile = () => {
-  return <div>User Profile Page</div>;
-};
+  return (
+    <div>
 
-export default UserProfile;
+    </div>
+  )
+}
+
+export default UserProfile
