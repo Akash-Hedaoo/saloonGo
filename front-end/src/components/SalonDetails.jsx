@@ -9,7 +9,10 @@ const SalonDetails = ({ salon }) => {
     isOpen: true,
     rating: 4.5,
     address: "123 Fashion Street, Downtown",
-    services: ["Haircut", "Shave", "Facial", "Styling"]
+    hasAC: true,
+    distance: "2.3 km",
+    waitingList: 8,
+    maxCapacity: 15
   };
 
   const salonData = salon || defaultSalon;
@@ -37,20 +40,24 @@ const SalonDetails = ({ salon }) => {
 
           <p className="salon-address">{salonData.address}</p>
 
-          <div className="salon-services">
-            <span className="services-label">Services:</span>
-            <div className="services-tags">
-              {salonData.services.slice(0, 3).map((service, index) => (
-                <span key={index} className="service-tag">{service}</span>
-              ))}
-              {salonData.services.length > 3 && (
-                <span className="service-tag more">+{salonData.services.length - 3} more</span>
-              )}
+          {/* Filters Section */}
+          <div className="salon-filters">
+            <span className="filters-label">Filters:</span>
+            <div className="filters-tags">
+              <span className={`filter-tag ${salonData.hasAC ? 'ac' : 'non-ac'}`}>
+                {salonData.hasAC ? 'AC' : 'Non-AC'}
+              </span>
+              <span className="filter-tag distance">
+                {salonData.distance}
+              </span>
+              <span className="filter-tag waiting-list">
+                {salonData.waitingList} in queue
+              </span>
             </div>
           </div>
 
-          <button className="view-details-btn">
-            View Details
+          <button className="book-appointment-btn">
+            Book Appointment
           </button>
         </div>
 
