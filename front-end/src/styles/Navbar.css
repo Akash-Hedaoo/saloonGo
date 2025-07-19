@@ -5,12 +5,21 @@
   justify-content: space-between;
   background: #fff;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
-  padding: 1.1rem 2.5rem;
+  padding: 0.6rem 2.5rem;
   position: sticky;
   top: 0;
   z-index: 100;
   backdrop-filter: blur(12px);
   transition: background 0.3s, box-shadow 0.3s;
+}
+
+@media (max-width: 1300px) {
+  .navbar.premium-navbar {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+  }
 }
 
 .gradient-text {

@@ -5,6 +5,7 @@ import SearchDashboard from './pages/SearchDashboard';
 import UserProfile from './pages/UserProfile';
 import Auth from './pages/Auth';
 import LandingPage from './pages/LandingPage';
+import ShopRegistration from './pages/ShopRegistration';
 
 function AppRoutes() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function AppRoutes() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<Auth initialMode='login' standalone />} />
         <Route path="/register" element={<Auth initialMode='register' standalone />} />
+        <Route path="/shop-registration" element={<ShopRegistration />} />
         <Route path="/search" element={<SearchDashboard />} />
         <Route path="/user-profile" element={<UserProfile />} />
       </Routes>
