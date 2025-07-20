@@ -1,4 +1,15 @@
-/* Empty appointment booking styles */ 
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+* {
+  box-sizing: border-box;
+}
+
+.appointment-booking-root {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 100%);
+  font-family: 'Montserrat', sans-serif;
+  padding: 20px;
+}
 
 .booking-header-row {
   display: flex;
@@ -39,6 +50,35 @@
   box-shadow: 0 2px 8px rgba(59,130,246,0.10);
 }
 
+/* Main Container */
+.appointment-booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.appointment-booking-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.appointment-booking-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.appointment-booking-header p {
+  font-size: 1.1rem;
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+}
+
 /* Salon List Styles */
 .salons-list {
   max-width: 1200px;
@@ -51,7 +91,6 @@
   font-weight: 600;
   color: #1f2937;
   margin-bottom: 24px;
-  text-align: center;
 }
 
 .salons-grid {
@@ -253,6 +292,10 @@
 }
 
 @media (max-width: 700px) {
+  .appointment-booking-root {
+    padding: 10px;
+  }
+  
   .booking-header-row {
     flex-direction: column;
     align-items: stretch;
@@ -269,6 +312,14 @@
     justify-content: center;
   }
   
+  .appointment-booking-header h1 {
+    font-size: 2rem;
+  }
+  
+  .appointment-booking-header p {
+    font-size: 1rem;
+  }
+  
   .salons-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -280,6 +331,19 @@
   
   .salon-card-name {
     font-size: 1.2rem;
+  }
+  
+  .book-appointment-btn {
+    align-self: stretch;
+  }
+  
+  .filters-tags {
+    gap: 0.4rem;
+  }
+  
+  .filter-tag {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.6rem;
   }
 }
 
@@ -304,7 +368,7 @@
   }
   
   .salon-card-address {
-    color: #9ca3af;
+    color: #a1a1aa;
   }
   
   .salons-list-title {
