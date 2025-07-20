@@ -348,67 +348,16 @@ const AppointmentBooking = () => {
           
           {/* Display success and error messages */}
           {success && (
-            <div style={{
-              backgroundColor: '#d4edda',
-              color: '#155724',
-              padding: '10px',
-              borderRadius: '4px',
-              marginBottom: '10px',
-              border: '1px solid #c3e6cb'
-            }}>
+            <div className="message success-message">
               {success}
             </div>
           )}
           
           {error && (
-            <div style={{
-              backgroundColor: '#f8d7da',
-              color: '#721c24',
-              padding: '10px',
-              borderRadius: '4px',
-              marginBottom: '10px',
-              border: '1px solid #f5c6cb'
-            }}>
+            <div className="message error-message">
               {error}
             </div>
           )}
-          
-          {/* Add manual refresh button */}
-          <button 
-            onClick={fetchSalons}
-            disabled={loading}
-            style={{
-              marginTop: '10px',
-              padding: '8px 16px',
-              backgroundColor: '#007bff',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
-            }}
-          >
-            {loading ? 'Refreshing...' : 'Refresh Salons'}
-          </button>
-          
-          {/* Add test salon creation button */}
-          <button 
-            onClick={createTestSalon}
-            disabled={loading}
-            style={{
-              marginTop: '10px',
-              marginLeft: '10px',
-              padding: '8px 16px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.6 : 1
-            }}
-          >
-            Create Test Salon
-          </button>
         </div>
         {selectedSalon ? (
           <div className="salon-details-view">
@@ -438,7 +387,6 @@ const AppointmentBooking = () => {
                   <div 
                     key={salon.id} 
                     className="salon-card"
-                    onClick={() => handleSalonSelect(salon)}
                   >
                     <div className="salon-card-image">
                       <img src={salon.image} alt={salon.name} />
@@ -466,6 +414,17 @@ const AppointmentBooking = () => {
                         </span>
                         <span className="tag distance">{salon.distance}</span>
                         <span className="tag waiting">{salon.waitingList} in queue</span>
+                      </div>
+                      <div className="salon-card-actions">
+                        <button 
+                          className="book-appointment-btn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            alert(`Appointment booked successfully for ${salon.name}! 🎉\n\nWe'll send you a confirmation email with the details.`);
+                          }}
+                        >
+                          Book Appointment
+                        </button>
                       </div>
                     </div>
                   </div>
