@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import api from '../services/api';
+import { useNavigate } from 'react-router-dom';
 import '../styles/ShopRegistration.css';
 
 const ShopRegistration = () => {
   const { signupSalonOwner } = useAuth();
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     fullName: '',
     email: '',
@@ -24,23 +25,6 @@ const ShopRegistration = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  useEffect(() => {
-    // Test server connectivity
-    const testServerConnection = async () => {
-      try {
-        console.log('Testing server connectivity...');
-        const response = await fetch('http://localhost:3001/api/auth/health');
-        const data = await response.json();
-        console.log('Server health check:', data);
-      } catch (error) {
-        console.error('Server connectivity test failed:', error);
-        setError('Cannot connect to server. Please check if the backend is running.');
-      }
-    };
-
-    testServerConnection();
-  }, []);
 
   const handleChange = e => {
     const { name, value, type, files } = e.target;
@@ -66,6 +50,21 @@ const ShopRegistration = () => {
       setError('Please fill in all required fields');
       return false;
     }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+    
+    // Phone validation (basic)
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    if (!phoneRegex.test(form.phoneNumber.replace(/\s/g, ''))) {
+      setError('Please enter a valid phone number');
+      return false;
+    }
+    
     return true;
   };
 
@@ -110,7 +109,7 @@ const ShopRegistration = () => {
       const response = await signupSalonOwner(registrationData);
       console.log('Signup response:', response);
 
-      setSuccess('Shop registration successful! Redirecting to your admin panel...');
+      setSuccess('Shop registration successful! Redirecting to your dashboard...');
       
       // Clear form after successful registration
       setForm({
@@ -129,86 +128,26 @@ const ShopRegistration = () => {
         role: 'salonOwner',
       });
 
-      // Redirect to admin panel after 2 seconds
+      // Redirect to shopkeeper dashboard after 2 seconds
       setTimeout(() => {
-        window.location.href = '/admin';
+        navigate('/shopkeeper-dashboard');
       }, 2000);
 
     } catch (error) {
       console.error('Registration error:', error);
-      console.error('Error response:', error.response);
-      console.error('Error data:', error.response?.data);
       
-      // Handle specific error types
-      if (error.response?.status === 400) {
-        const errorData = error.response.data;
-        if (errorData.errors) {
-          // Validation errors
-          const errorMessages = Object.values(errorData.errors).join(', ');
-          setError(`Validation errors: ${errorMessages}`);
-        } else if (errorData.error) {
-          setError(errorData.error);
-        } else {
-          setError('Invalid registration data. Please check your information.');
-        }
-      } else if (error.response?.status === 409) {
-        setError('A salon with this email already exists. Please use a different email.');
-      } else if (error.response?.status === 500) {
-        const errorData = error.response.data;
-        if (errorData.details) {
-          setError(`Server error: ${errorData.details}`);
-        } else {
-          setError('Server error during registration. Please try again later.');
-        }
-      } else if (error.code === 'NETWORK_ERROR') {
-        setError('Network error. Please check your internet connection and try again.');
+      // Handle error from AuthContext
+      if (error.error) {
+        setError(error.error);
       } else {
-        const errorMessage = error.response?.data?.error || 
-                            error.response?.data?.details || 
-                            error.response?.data?.message || 
-                            error.message ||
-                            'Registration failed. Please try again.';
-        setError(errorMessage);
+        setError('Registration failed. Please try again.');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const createTestRegistration = async () => {
-    try {
-      const testData = {
-        fullName: 'Test Owner',
-        email: `testowner${Date.now()}@example.com`,
-        password: 'Test123!',
-        salonName: 'Test Salon',
-        salonAddress: '123 Test St, Test City, TS 12345',
-        phoneNumber: '+1234567890',
-        servicesOffered: 'Haircut, Hair Coloring, Hair Styling',
-        openHours: '10AM-6PM',
-        city: 'Test City',
-        state: 'TS',
-        pincode: '12345',
-        role: 'salonOwner'
-      };
 
-      console.log('Creating test registration record...');
-      const response = await signupSalonOwner(testData);
-      console.log('Test registration response:', response);
-      setSuccess('Test registration record created successfully!');
-      setError(''); // Clear any previous errors
-    } catch (error) {
-      console.error('Error creating test registration record:', error);
-      console.error('Error response:', error.response);
-      console.error('Error data:', error.response?.data);
-      const errorMessage = error.response?.data?.error || 
-                          error.response?.data?.details || 
-                          error.response?.data?.message || 
-                          error.message ||
-                          'Failed to create test registration record.';
-      setError(errorMessage);
-    }
-  };
 
   return (
     <div className="shopreg-root">
@@ -354,20 +293,29 @@ const ShopRegistration = () => {
           Already registered? <a href="/login">Login here</a>
         </div>
         
-        {/* Test button for creating registration record */}
-        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+        <div className="shopreg-demo-section">
+          <p>Want to try it out? Use our demo registration:</p>
           <button 
-            onClick={createTestRegistration}
-            style={{
-              padding: '10px 20px',
-              backgroundColor: '#28a745',
-              color: 'white',
-              border: 'none',
-              borderRadius: '5px',
-              cursor: 'pointer'
+            className="shopreg-demo-btn"
+            onClick={() => {
+              setForm({
+                fullName: 'Demo Salon Owner',
+                email: `demo${Date.now()}@salon.com`,
+                password: 'demo123',
+                confirmPassword: 'demo123',
+                salonName: 'Demo Beauty Salon',
+                salonAddress: '123 Demo Street, Demo City',
+                phoneNumber: '+1234567890',
+                servicesOffered: 'Haircut, Hair Coloring, Facial, Manicure',
+                openHours: '9:00 AM - 8:00 PM',
+                city: 'Demo City',
+                state: 'DC',
+                pincode: '12345',
+                role: 'salonOwner',
+              });
             }}
           >
-            Test Create Registration Record
+            Fill Demo Data
           </button>
         </div>
       </div>

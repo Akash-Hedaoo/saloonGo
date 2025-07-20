@@ -180,6 +180,39 @@
   text-decoration: underline;
 }
 
+.shopreg-demo-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.shopreg-demo-section p {
+  margin: 0 0 0.8rem 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.shopreg-demo-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: 1px solid #3b82f6;
+  background: transparent;
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shopreg-demo-btn:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-1px);
+}
+
 .shopreg-location-fields {
   display: flex;
   gap: 0.7rem;
@@ -289,5 +322,20 @@
     background: rgba(34, 197, 94, 0.1);
     border-color: rgba(34, 197, 94, 0.3);
     color: #86efac;
+  }
+  .shopreg-demo-section {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+  .shopreg-demo-section p {
+    color: #a1a1aa;
+  }
+  .shopreg-demo-btn {
+    border-color: #6366f1;
+    color: #6366f1;
+  }
+  .shopreg-demo-btn:hover {
+    background: #6366f1;
+    color: white;
   }
 } 
