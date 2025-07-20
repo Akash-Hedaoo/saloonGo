@@ -7,6 +7,7 @@ const { validateSignup, validateLogin, validateSalonRegistration } = require('..
 const { authenticateToken } = require('../middleware/auth');
 const jwt = require('jsonwebtoken'); // Added missing import for jwt
 const config = require('../config/config'); // Added missing import for config
+const { isAdmin } = require('../middleware/auth'); // Fixed import path
 
 // ✅ 0. Health Check
 router.get('/health', async (req, res) => {
@@ -206,9 +207,45 @@ router.post('/signup/salonOwner', async (req, res) => {
     const salonOwnerRef = await db.collection('salonOwners').add(salonOwnerData);
     console.log('Salon owner created with ID:', salonOwnerRef.id);
     
+    // Create a separate registration record with all form details
+    const registrationData = {
+      ownerId: salonOwnerRef.id,
+      salonId: null, // Will be updated after salon creation
+      registrationDate: admin.firestore.FieldValue.serverTimestamp(),
+      status: 'completed',
+      // Original form data
+      fullName: fullName.trim(),
+      email: email.trim(),
+      salonName: salonName.trim(),
+      salonAddress: salonAddress.trim(),
+      phoneNumber: phoneNumber.trim(),
+      servicesOffered: servicesArray,
+      openHours: openHours || null,
+      city: city || null,
+      state: state || null,
+      pincode: pincode || null,
+      role: role || 'salonOwner',
+      // Additional metadata
+      ipAddress: req.ip || req.connection.remoteAddress || 'unknown',
+      userAgent: req.headers['user-agent'] || 'unknown',
+      registrationSource: 'web_form',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    console.log('Creating registration record...');
+    try {
+      const registrationRef = await db.collection('shopRegistrations').add(registrationData);
+      console.log('✅ Registration record created with ID:', registrationRef.id);
+    } catch (registrationError) {
+      console.error('❌ Failed to create registration record:', registrationError);
+      // Continue with the process even if registration record fails
+    }
+    
     // Create salon entry for search/discovery
     const salonData = {
       ownerId: salonOwnerRef.id,
+      registrationId: registrationRef.id, // Link to registration record
       name: salonName.trim(),
       description: `Salon offering ${servicesArray.join(', ')}`,
       address: salonAddress.trim(),
@@ -261,6 +298,19 @@ router.post('/signup/salonOwner', async (req, res) => {
     const salonRef = await db.collection('salons').add(salonData);
     console.log('Salon search document created with ID:', salonRef.id);
     
+    // Update the registration record with the salon ID
+    try {
+      if (registrationRef) {
+        await db.collection('shopRegistrations').doc(registrationRef.id).update({
+          salonId: salonRef.id,
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        });
+        console.log('✅ Registration record updated with salon ID');
+      }
+    } catch (updateError) {
+      console.error('❌ Failed to update registration record:', updateError);
+    }
+    
     // Generate tokens
     const tokenPayload = {
       userId: salonOwnerRef.id,
@@ -289,6 +339,7 @@ router.post('/signup/salonOwner', async (req, res) => {
       salon: {
         id: salonOwnerRef.id,
         salonId: salonRef.id,
+        registrationId: registrationRef?.id || null,
         salonName: salonOwnerData.salonName,
         email: salonOwnerData.email,
         role: salonOwnerData.role
@@ -594,6 +645,88 @@ router.get('/test-auth', authenticateToken, async (req, res) => {
   } catch (error) {
     console.error('Test auth error:', error);
     res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// ✅ 8. Test endpoint to create a shop registration
+router.post('/test-registration', async (req, res) => {
+  try {
+    const testRegistrationData = {
+      ownerId: 'test-owner-id',
+      salonId: 'test-salon-id',
+      registrationDate: admin.firestore.FieldValue.serverTimestamp(),
+      status: 'completed',
+      fullName: 'Test Owner',
+      email: 'test@example.com',
+      salonName: 'Test Salon',
+      salonAddress: '123 Test Street',
+      phoneNumber: '+1234567890',
+      servicesOffered: ['Hair Cut', 'Facial'],
+      openHours: '9AM-6PM',
+      city: 'Test City',
+      state: 'Test State',
+      pincode: '123456',
+      role: 'salonOwner',
+      ipAddress: req.ip || 'test',
+      userAgent: req.headers['user-agent'] || 'test',
+      registrationSource: 'test',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt: admin.firestore.FieldValue.serverTimestamp()
+    };
+
+    console.log('Creating test registration record...');
+    const registrationRef = await db.collection('shopRegistrations').add(testRegistrationData);
+    console.log('✅ Test registration created with ID:', registrationRef.id);
+
+    res.json({
+      success: true,
+      message: 'Test registration created successfully',
+      registrationId: registrationRef.id
+    });
+  } catch (error) {
+    console.error('Test registration error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to create test registration',
+      error: error.message
+    });
+  }
+});
+
+// ✅ 9. Get Registration by ID
+router.get('/registrations/:registrationId', authenticateToken, async (req, res) => {
+  try {
+    const { registrationId } = req.params;
+    console.log('Getting registration:', registrationId);
+    
+    const registrationDoc = await db.collection('shopRegistrations').doc(registrationId).get();
+    
+    if (!registrationDoc.exists) {
+      return res.status(404).json({
+        success: false,
+        message: 'Registration not found'
+      });
+    }
+    
+    const registrationData = registrationDoc.data();
+    
+    res.json({
+      success: true,
+      registration: {
+        id: registrationDoc.id,
+        ...registrationData,
+        createdAt: registrationData.createdAt?.toDate?.() || registrationData.createdAt,
+        updatedAt: registrationData.updatedAt?.toDate?.() || registrationData.updatedAt,
+        registrationDate: registrationData.registrationDate?.toDate?.() || registrationData.registrationDate
+      }
+    });
+  } catch (error) {
+    console.error('Get registration error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to get registration',
+      error: error.message
+    });
   }
 });
 

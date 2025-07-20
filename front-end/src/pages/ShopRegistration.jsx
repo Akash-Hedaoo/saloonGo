@@ -175,6 +175,41 @@ const ShopRegistration = () => {
     }
   };
 
+  const createTestRegistration = async () => {
+    try {
+      const testData = {
+        fullName: 'Test Owner',
+        email: `testowner${Date.now()}@example.com`,
+        password: 'Test123!',
+        salonName: 'Test Salon',
+        salonAddress: '123 Test St, Test City, TS 12345',
+        phoneNumber: '+1234567890',
+        servicesOffered: 'Haircut, Hair Coloring, Hair Styling',
+        openHours: '10AM-6PM',
+        city: 'Test City',
+        state: 'TS',
+        pincode: '12345',
+        role: 'salonOwner'
+      };
+
+      console.log('Creating test registration record...');
+      const response = await signupSalonOwner(testData);
+      console.log('Test registration response:', response);
+      setSuccess('Test registration record created successfully!');
+      setError(''); // Clear any previous errors
+    } catch (error) {
+      console.error('Error creating test registration record:', error);
+      console.error('Error response:', error.response);
+      console.error('Error data:', error.response?.data);
+      const errorMessage = error.response?.data?.error || 
+                          error.response?.data?.details || 
+                          error.response?.data?.message || 
+                          error.message ||
+                          'Failed to create test registration record.';
+      setError(errorMessage);
+    }
+  };
+
   return (
     <div className="shopreg-root">
       <div className="shopreg-container">
@@ -317,6 +352,23 @@ const ShopRegistration = () => {
         
         <div className="shopreg-login-link">
           Already registered? <a href="/login">Login here</a>
+        </div>
+        
+        {/* Test button for creating registration record */}
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <button 
+            onClick={createTestRegistration}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#28a745',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer'
+            }}
+          >
+            Test Create Registration Record
+          </button>
         </div>
       </div>
     </div>

@@ -23,20 +23,31 @@ export const AuthProvider = ({ children }) => {
     const checkAuthStatus = async () => {
       try {
         console.log('AuthContext: Checking authentication status...');
-        console.log('AuthContext: Token exists:', !!localStorage.getItem('accessToken'));
         
-        if (isAuthenticated()) {
-          console.log('AuthContext: Token found, getting current user...');
-          const response = await authAPI.getCurrentUser();
-          console.log('AuthContext: Current user response:', response.data);
-          setUser(response.data.user);
+        // For hackathon prototype, just check if we have tokens
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+        
+        if (accessToken && refreshToken) {
+          console.log('AuthContext: Tokens found, getting current user...');
+          try {
+            const response = await authAPI.getCurrentUser();
+            console.log('AuthContext: Current user response:', response.data);
+            setUser(response.data.user);
+          } catch (error) {
+            console.log('AuthContext: Could not get current user, using stored data');
+            // For hackathon, just use stored user data if available
+            const storedUser = localStorage.getItem('user');
+            if (storedUser) {
+              setUser(JSON.parse(storedUser));
+            }
+          }
         } else {
-          console.log('AuthContext: No token found, user not authenticated');
+          console.log('AuthContext: No tokens found');
         }
       } catch (error) {
         console.error('AuthContext: Auth check failed:', error);
-        console.error('AuthContext: Error response:', error.response?.data);
-        clearAuthTokens();
+        // Don't clear tokens for hackathon prototype
       } finally {
         setLoading(false);
       }
@@ -72,6 +83,9 @@ export const AuthProvider = ({ children }) => {
       
       setAuthTokens(token, refreshToken);
       setUser(salon);
+      
+      // Store user data in localStorage for hackathon prototype
+      localStorage.setItem('user', JSON.stringify(salon));
       
       return { success: true, user: salon };
     } catch (error) {
@@ -109,6 +123,9 @@ export const AuthProvider = ({ children }) => {
       setAuthTokens(token, refreshToken);
       setUser(salon);
       
+      // Store user data in localStorage for hackathon prototype
+      localStorage.setItem('user', JSON.stringify(salon));
+      
       return { success: true, user: salon };
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Login failed';
@@ -125,6 +142,7 @@ export const AuthProvider = ({ children }) => {
       console.error('Logout error:', error);
     } finally {
       clearAuthTokens();
+      localStorage.removeItem('user'); // Clear stored user data
       setUser(null);
       setError(null);
     }

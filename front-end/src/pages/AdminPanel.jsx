@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import Sidebar from '../components/Sidebar';
-import TodaysAppointments from '../components/TodaysAppointments';
 import AdminProfile from '../components/AdminProfile';
-// import UpcomingAppointments from '../components/UpcomingAppointments';
+import TodaysAppointments from '../components/TodaysAppointments';
 import '../styles/AdminPanel.css';
 
 const AdminPanel = () => {
   const [showProfile, setShowProfile] = useState(false);
+
+  if (showProfile) {
+    return <AdminProfile />;
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>

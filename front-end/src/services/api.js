@@ -24,46 +24,18 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle token refresh
+// Response interceptor for handling token refresh
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
-    // Handle both 401 (Unauthorized) and 403 (Forbidden) as potential token issues
-    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
-      originalRequest._retry = true;
-
-      try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        if (refreshToken) {
-          console.log('Attempting to refresh token...');
-          const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
-            refreshToken,
-          });
-
-          const { token: accessToken, refreshToken: newRefreshToken } = response.data;
-          localStorage.setItem('accessToken', accessToken);
-          localStorage.setItem('refreshToken', newRefreshToken);
-          console.log('Token refreshed successfully');
-          
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-          return api(originalRequest);
-        } else {
-          console.log('No refresh token available');
-          throw new Error('No refresh token');
-        }
-      } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
-        // Only redirect to login if refresh token fails
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('user');
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
+    
+    // For hackathon prototype, just log the error and don't redirect
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      console.log('API Error:', error.response?.status, error.response?.data);
+      // Don't redirect for hackathon prototype
     }
-
+    
     return Promise.reject(error);
   }
 );
@@ -92,7 +64,7 @@ export const authAPI = {
   getCurrentUser: () => api.get('/auth/me'),
   
   // Test authentication
-  testAuth: () => api.get('/auth/test-auth'),
+  testAuth: () => api.get('/auth/test'),
 };
 
 // User Management API
@@ -159,6 +131,16 @@ export const getAuthTokens = () => ({
 
 export const isAuthenticated = () => {
   return !!localStorage.getItem('accessToken');
+};
+
+export const checkTokenValidity = (token) => {
+  try {
+    const decoded = JSON.parse(atob(token.split('.')[1]));
+    const exp = decoded.exp;
+    return Date.now() < exp * 1000;
+  } catch (e) {
+    return false;
+  }
 };
 
 export default api;
