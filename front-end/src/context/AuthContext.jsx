@@ -147,6 +147,63 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Salon owner signup function
+  const signupSalonOwner = async (userData) => {
+    try {
+      setError(null);
+      
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      const { email, password, fullName, phoneNumber, salonName, salonAddress, servicesOffered, openHours, city, state, pincode } = userData;
+      
+      // Check if user already exists
+      const existingUser = dummyUsers.salonOwners.find(user => user.email === email);
+      if (existingUser) {
+        setError('A salon with this email already exists');
+        return { success: false, error: 'A salon with this email already exists' };
+      }
+      
+      // Create new salon owner
+      const newSalonOwner = {
+        id: `salon${Date.now()}`,
+        email,
+        password,
+        name: fullName,
+        phone: phoneNumber,
+        userType: 'salonOwner',
+        salonName,
+        salonAddress,
+        servicesOffered,
+        openHours,
+        city,
+        state,
+        pincode,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Add to dummy users
+      dummyUsers.salonOwners.push(newSalonOwner);
+      
+      // Create tokens
+      const token = `dummy_token_${Date.now()}`;
+      const refreshToken = `dummy_refresh_${Date.now()}`;
+      
+      // Store tokens and user data
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(newSalonOwner));
+      
+      setUser(newSalonOwner);
+      
+      return { success: true, user: newSalonOwner };
+    } catch (error) {
+      const errorMessage = 'Salon registration failed. Please try again.';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  };
+
   // Logout
   const logout = async () => {
     try {
@@ -180,6 +237,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     signup,
+    signupSalonOwner,
     logout,
     clearError,
     getCurrentUser,

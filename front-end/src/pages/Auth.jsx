@@ -111,8 +111,12 @@ const Auth = ({ initialMode = 'login', standalone }) => {
 
       if (loginResult.success) {
         alert(`Welcome ${formData.name}! Your account has been created successfully.`);
-        const from = location.state?.from?.pathname || '/';
-        navigate(from, { replace: true });
+        // Redirect based on user type
+        let redirectPath = location.state?.from?.pathname || '/';
+        if (loginResult.user.userType === 'salonOwner') {
+          redirectPath = '/shopkeeper-dashboard';
+        }
+        navigate(redirectPath, { replace: true });
       }
     } catch (error) {
       console.error('Signup error:', error);
@@ -140,8 +144,12 @@ const Auth = ({ initialMode = 'login', standalone }) => {
 
       if (result.success) {
         alert(`Welcome back, ${result.user.name}!`);
-        const from = location.state?.from?.pathname || '/';
-        navigate(from, { replace: true });
+        // Redirect based on user type
+        let redirectPath = location.state?.from?.pathname || '/';
+        if (result.user.userType === 'salonOwner') {
+          redirectPath = '/shopkeeper-dashboard';
+        }
+        navigate(redirectPath, { replace: true });
       } else {
         alert('Invalid email or password. Please try again.');
       }

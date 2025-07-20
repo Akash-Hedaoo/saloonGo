@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import SearchDashboard from './pages/SearchDashboard';
@@ -10,6 +11,7 @@ import LandingPage from './pages/LandingPage';
 import Contact from './pages/Contact';
 import ShopRegistration from './pages/ShopRegistration';
 import AdminPanel from './pages/AdminPanel';
+import ShopkeeperDashboard from './pages/ShopkeeperDashboard';
 import AppointmentBooking from './pages/AppointmentBooking';
 import SalonDetails from './components/SalonDetails';
 
@@ -39,6 +41,11 @@ function AppRoutes() {
             <AdminPanel />
           </ProtectedRoute>
         } />
+        <Route path="/shopkeeper-dashboard" element={
+          <ProtectedRoute requiredRole={["salonOwner"]}>
+            <ShopkeeperDashboard />
+          </ProtectedRoute>
+        } />
         <Route path="/appointment-booking" element={<AppointmentBooking />} />
         <Route path="/salon-details" element={<SalonDetails />} />
       </Routes>
@@ -50,11 +57,13 @@ const App = () => {
   console.log('App component rendering - FULL APP RESTORED');
   
   return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 };
 
