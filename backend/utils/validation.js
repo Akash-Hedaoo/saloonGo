@@ -69,12 +69,40 @@ const validateProfileUpdate = (data) => {
     errors.name = 'Name must be 2-50 characters';
   }
 
+  if (data.fullName && !validateName(data.fullName)) {
+    errors.fullName = 'Full name must be 2-50 characters';
+  }
+
+  if (data.salonName && !validateName(data.salonName)) {
+    errors.salonName = 'Salon name must be 2-50 characters';
+  }
+
   if (data.phone && !validatePhone(data.phone)) {
     errors.phone = 'Valid phone number is required';
   }
 
+  if (data.phoneNumber && !validatePhone(data.phoneNumber)) {
+    errors.phoneNumber = 'Valid phone number is required';
+  }
+
   if (data.address && !validateAddress(data.address)) {
     errors.address = 'Address must be 10-200 characters';
+  }
+
+  if (data.salonAddress && !validateAddress(data.salonAddress)) {
+    errors.salonAddress = 'Salon address must be 10-200 characters';
+  }
+
+  if (data.city && data.city.trim().length < 2) {
+    errors.city = 'City must be at least 2 characters';
+  }
+
+  if (data.state && data.state.trim().length < 2) {
+    errors.state = 'State must be at least 2 characters';
+  }
+
+  if (data.pincode && !/^\d{6}$/.test(data.pincode.trim())) {
+    errors.pincode = 'Pincode must be 6 digits';
   }
 
   return {

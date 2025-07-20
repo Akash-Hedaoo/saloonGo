@@ -30,28 +30,37 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    // Handle both 401 (Unauthorized) and 403 (Forbidden) as potential token issues
+    if ((error.response?.status === 401 || error.response?.status === 403) && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
+          console.log('Attempting to refresh token...');
           const response = await axios.post(`${API_BASE_URL}/auth/refresh`, {
             refreshToken,
           });
 
-          const { accessToken } = response.data;
+          const { token: accessToken, refreshToken: newRefreshToken } = response.data;
           localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', newRefreshToken);
+          console.log('Token refreshed successfully');
           
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return api(originalRequest);
+        } else {
+          console.log('No refresh token available');
+          throw new Error('No refresh token');
         }
       } catch (refreshError) {
-        // Refresh token failed, redirect to login
+        console.error('Token refresh failed:', refreshError);
+        // Only redirect to login if refresh token fails
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
         window.location.href = '/login';
+        return Promise.reject(refreshError);
       }
     }
 
@@ -81,6 +90,9 @@ export const authAPI = {
   
   // Get current user
   getCurrentUser: () => api.get('/auth/me'),
+  
+  // Test authentication
+  testAuth: () => api.get('/auth/test-auth'),
 };
 
 // User Management API
@@ -100,6 +112,32 @@ export const userAPI = {
   
   // Account deactivation
   deactivateAccount: () => api.put('/user/deactivate'),
+};
+
+// Salon Management API
+export const salonAPI = {
+  // Get all salons for search
+  getAllSalons: (params = {}) => api.get('/salon/all', { params }),
+  
+  // Get salon profile
+  getSalonProfile: (salonId) => api.get(`/salon/profile/${salonId}`),
+  
+  // Update salon profile (for salon owners)
+  updateSalonProfile: (salonId, profileData) => api.put(`/salon/profile/${salonId}`, profileData),
+  
+  // Update salon owner profile and sync with salon
+  updateSalonOwnerProfile: (ownerId, profileData) => api.put(`/salon/owner-profile/${ownerId}`, profileData),
+  
+  // Get owner's salons
+  getMySalons: () => api.get('/salon/my-salons'),
+  
+  // Salon services
+  addService: (salonId, serviceData) => api.post(`/salon/${salonId}/services`, serviceData),
+  updateService: (salonId, serviceId, serviceData) => api.put(`/salon/${salonId}/services/${serviceId}`, serviceData),
+  deleteService: (salonId, serviceId) => api.delete(`/salon/${salonId}/services/${serviceId}`),
+  
+  // Salon availability
+  updateAvailability: (salonId, availabilityData) => api.put(`/salon/${salonId}/availability`, availabilityData),
 };
 
 // Utility functions
@@ -123,4 +161,4 @@ export const isAuthenticated = () => {
   return !!localStorage.getItem('accessToken');
 };
 
-export default api; 
+export default api;

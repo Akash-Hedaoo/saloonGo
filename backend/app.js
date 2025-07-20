@@ -6,6 +6,8 @@ const config = require('./config/config');
 // Import routes
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
+const salonRoutes = require("./routes/salonRoutes");
+const appointmentRoutes = require("./routes/appointmentRoutes");
 
 const app = express();
 
@@ -36,6 +38,8 @@ app.get('/health', (req, res) => {
 // Mount routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/salon', salonRoutes);
+app.use('/api/appointments', appointmentRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -63,5 +67,7 @@ app.listen(PORT, () => {
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`🔐 Auth endpoints: http://localhost:${PORT}/api/auth`);
   console.log(`👤 User endpoints: http://localhost:${PORT}/api/user`);
+  console.log(`💇 Salon endpoints: http://localhost:${PORT}/api/salon`);
+  console.log(`📅 Appointment endpoints: http://localhost:${PORT}/api/appointments`);
   console.log(`🔥 Firebase Project: ${config.firebaseProjectId}`);
 });

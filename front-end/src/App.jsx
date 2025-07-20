@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
@@ -16,6 +16,9 @@ import SalonDetails from './components/SalonDetails';
 function AppRoutes() {
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  
+  console.log('AppRoutes rendering, location:', location.pathname);
+  
   return (
     <>
       {!isAuthPage && <Navbar />}
@@ -32,7 +35,7 @@ function AppRoutes() {
         } />
         <Route path="/contact" element={<Contact />} />
         <Route path="/admin" element={
-          <ProtectedRoute requiredRole="admin">
+          <ProtectedRoute requiredRole={["admin", "salonOwner"]}>
             <AdminPanel />
           </ProtectedRoute>
         } />
@@ -44,10 +47,12 @@ function AppRoutes() {
 }
 
 const App = () => {
+  console.log('App component rendering - FULL APP RESTORED');
+  
   return (
     <AuthProvider>
       <Router>
-        <AppRoutes/>
+        <AppRoutes />
       </Router>
     </AuthProvider>
   );

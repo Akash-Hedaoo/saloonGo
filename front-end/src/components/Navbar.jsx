@@ -20,7 +20,13 @@ const Navbar = () => {
       <div className="navbar-logo gradient-text">SaloonGo</div>
       <div className={`navbar-links${open ? ' open' : ''}`}>
         <Link to="/" onClick={() => setOpen(false)}>Home</Link>
+        <Link to="/appointment-booking" onClick={() => setOpen(false)}>Find Salons</Link>
         <Link to="/contact" onClick={() => setOpen(false)}>Contact</Link>
+        {isAuthenticated && user?.role === 'salonOwner' && (
+          <Link to="/admin" className="navbar-management-btn" onClick={() => setOpen(false)}>
+            Manage Salon
+          </Link>
+        )}
         {user?.role === 'admin' && (
           <Link to="/admin" className="navbar-admin-btn" onClick={() => setOpen(false)}>
             Admin Panel

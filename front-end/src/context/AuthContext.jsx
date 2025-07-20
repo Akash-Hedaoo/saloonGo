@@ -3,6 +3,8 @@ import { authAPI, setAuthTokens, clearAuthTokens, isAuthenticated } from '../ser
 
 const AuthContext = createContext();
 
+export { AuthContext };
+
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
@@ -20,12 +22,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
+        console.log('AuthContext: Checking authentication status...');
+        console.log('AuthContext: Token exists:', !!localStorage.getItem('accessToken'));
+        
         if (isAuthenticated()) {
+          console.log('AuthContext: Token found, getting current user...');
           const response = await authAPI.getCurrentUser();
+          console.log('AuthContext: Current user response:', response.data);
           setUser(response.data.user);
+        } else {
+          console.log('AuthContext: No token found, user not authenticated');
         }
       } catch (error) {
-        console.error('Auth check failed:', error);
+        console.error('AuthContext: Auth check failed:', error);
+        console.error('AuthContext: Error response:', error.response?.data);
         clearAuthTokens();
       } finally {
         setLoading(false);

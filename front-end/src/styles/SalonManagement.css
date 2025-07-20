@@ -1,0 +1,726 @@
+/* Salon Management Dashboard Styles */
+
+.salon-management {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.salon-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.salon-management-header h1 {
+  color: #1f2937;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.add-salon-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.add-salon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border-left: 4px solid #dc2626;
+}
+
+.no-salons {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f9fafb;
+  border-radius: 16px;
+  border: 2px dashed #d1d5db;
+}
+
+.no-salons h2 {
+  color: #374151;
+  margin-bottom: 10px;
+}
+
+.no-salons p {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.no-salons button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.no-salons button:hover {
+  background: #2563eb;
+}
+
+.salon-management-content {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.salon-selector {
+  padding: 20px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.salon-selector label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.salon-selector select {
+  padding: 8px 12px;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  background: white;
+  min-width: 200px;
+}
+
+.salon-tabs {
+  display: flex;
+  background: #f8fafc;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.salon-tabs button {
+  flex: 1;
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+.salon-tabs button:hover {
+  background: #f1f5f9;
+  color: #374151;
+}
+
+.salon-tabs button.active {
+  color: #3b82f6;
+  border-bottom-color: #3b82f6;
+  background: white;
+}
+
+.tab-content {
+  padding: 30px;
+}
+
+/* Overview Tab */
+.overview-tab {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.salon-info h2 {
+  color: #1f2937;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.salon-info p {
+  color: #6b7280;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.salon-details {
+  display: grid;
+  gap: 12px;
+}
+
+.salon-details div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.salon-details strong {
+  color: #374151;
+  min-width: 80px;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.status.open {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.closed {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.quick-stats {
+  display: grid;
+  gap: 16px;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.stat-card h3 {
+  font-size: 2rem;
+  color: #3b82f6;
+  margin: 0 0 8px 0;
+}
+
+.stat-card p {
+  color: #6b7280;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Services Tab */
+.services-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.services-header h2 {
+  color: #1f2937;
+  margin: 0;
+}
+
+.services-header button {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.services-header button:hover {
+  background: #059669;
+}
+
+.services-list {
+  display: grid;
+  gap: 16px;
+}
+
+.service-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.service-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.service-info h3 {
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  font-size: 1.2rem;
+}
+
+.service-info p {
+  color: #6b7280;
+  margin: 0 0 12px 0;
+}
+
+.service-details {
+  display: flex;
+  gap: 16px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.service-details span {
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.delete-btn {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+  background: #dc2626;
+}
+
+/* Availability Tab */
+.availability-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.availability-header h2 {
+  color: #1f2937;
+  margin: 0;
+}
+
+.status-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.status-btn.open {
+  background: #10b981;
+  color: white;
+}
+
+.status-btn.closed {
+  background: #ef4444;
+  color: white;
+}
+
+.status-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.working-hours {
+  margin-bottom: 30px;
+}
+
+.working-hours h3 {
+  color: #1f2937;
+  margin-bottom: 16px;
+}
+
+.hours-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.day-hours {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.day-hours label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #374151;
+  min-width: 120px;
+}
+
+.day-hours input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-inputs input[type="time"] {
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.time-inputs span {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.holidays-section {
+  margin-top: 30px;
+}
+
+.holidays-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.holidays-header h3 {
+  color: #1f2937;
+  margin: 0;
+}
+
+.holidays-header button {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.holidays-header button:hover {
+  background: #d97706;
+}
+
+.holidays-list {
+  display: grid;
+  gap: 12px;
+}
+
+.holiday-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: #fef3c7;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+}
+
+.holiday-info h4 {
+  color: #92400e;
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+}
+
+.holiday-info p {
+  color: #a16207;
+  margin: 0 0 4px 0;
+}
+
+.holiday-info span {
+  color: #92400e;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Gallery Tab */
+.gallery-tab h2 {
+  color: #1f2937;
+  margin-bottom: 20px;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.gallery-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.gallery-item .delete-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal h2 {
+  color: #1f2937;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.modal form {
+  display: grid;
+  gap: 16px;
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+  padding: 12px 16px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.modal textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.modal label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.modal label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #3b82f6;
+}
+
+.modal .time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal .time-inputs input[type="time"] {
+  flex: 1;
+}
+
+.modal .time-inputs span {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modal-buttons button[type="submit"] {
+  background: #3b82f6;
+  color: white;
+}
+
+.modal-buttons button[type="submit"]:hover {
+  background: #2563eb;
+}
+
+.modal-buttons button[type="button"] {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.modal-buttons button[type="button"]:hover {
+  background: #d1d5db;
+}
+
+/* Loading and Error States */
+.salon-management-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  font-size: 18px;
+  color: #6b7280;
+}
+
+.salon-management-error {
+  text-align: center;
+  padding: 40px;
+  color: #dc2626;
+  font-size: 18px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .salon-management {
+    padding: 10px;
+  }
+
+  .salon-management-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .salon-management-header h1 {
+    font-size: 2rem;
+  }
+
+  .overview-tab {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .salon-tabs {
+    flex-wrap: wrap;
+  }
+
+  .salon-tabs button {
+    flex: none;
+    min-width: 120px;
+  }
+
+  .tab-content {
+    padding: 20px;
+  }
+
+  .service-card,
+  .holiday-card {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .service-details {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .day-hours {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .time-inputs {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .modal {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .salon-management-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .stat-card h3 {
+    font-size: 1.5rem;
+  }
+} 

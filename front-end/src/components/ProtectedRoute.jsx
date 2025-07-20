@@ -22,9 +22,12 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   }
 
   // Check role if required
-  if (requiredRole && user?.role !== requiredRole) {
-    // Redirect to unauthorized page or home
-    return <Navigate to="/" replace />;
+  if (requiredRole) {
+    const allowedRoles = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
+    if (!allowedRoles.includes(user?.role)) {
+      // Redirect to unauthorized page or home
+      return <Navigate to="/" replace />;
+    }
   }
 
   return children;

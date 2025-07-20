@@ -188,23 +188,33 @@ router.put('/salon/profile', authenticateToken, isSalonOwner, async (req, res) =
     const { userId } = req.user;
     const { 
       fullName, 
+      email,
       salonName, 
       salonAddress, 
       phoneNumber, 
       servicesOffered, 
       openHours,
+      city,
+      state,
+      pincode,
       location 
     } = req.body;
 
+    console.log('Updating salon profile for user:', userId, 'with data:', req.body);
+
     // Validate input
     const validation = validateProfileUpdate({ 
-      name: fullName || salonName, 
-      phone: phoneNumber, 
-      address: salonAddress 
+      fullName, 
+      salonName, 
+      phoneNumber, 
+      salonAddress,
+      city,
+      state,
+      pincode
     });
     
     if (!validation.isValid) {
-      return res.status(400).json({ errors: validation.errors });
+      return res.status(400).json({ error: 'Validation failed', errors: validation.errors });
     }
 
     const updateData = {
@@ -212,20 +222,32 @@ router.put('/salon/profile', authenticateToken, isSalonOwner, async (req, res) =
     };
 
     if (fullName) updateData.fullName = fullName.trim();
+    if (email) updateData.email = email.trim();
     if (salonName) updateData.salonName = salonName.trim();
     if (salonAddress) updateData.salonAddress = salonAddress.trim();
     if (phoneNumber) updateData.phoneNumber = phoneNumber.trim();
     if (servicesOffered) updateData.servicesOffered = servicesOffered;
     if (openHours) updateData.openHours = openHours;
+    if (city) updateData.city = city.trim();
+    if (state) updateData.state = state.trim();
+    if (pincode) updateData.pincode = pincode.trim();
     if (location) updateData.location = location;
+
+    console.log('Updating salon with data:', updateData);
 
     await db.collection('salonOwners').doc(userId).update(updateData);
 
-    res.json({ message: 'Salon profile updated successfully' });
+    res.json({ 
+      message: 'Salon profile updated successfully',
+      updatedData: updateData
+    });
 
   } catch (error) {
     console.error('Update salon profile error:', error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ 
+      error: 'Server error updating salon profile',
+      details: error.message 
+    });
   }
 });
 
