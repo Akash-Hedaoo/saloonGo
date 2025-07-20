@@ -235,10 +235,63 @@ router.put('/salon/profile', authenticateToken, isSalonOwner, async (req, res) =
 
     console.log('Updating salon with data:', updateData);
 
+    // Update salon owner profile
     await db.collection('salonOwners').doc(userId).update(updateData);
 
+    // AUTOMATICALLY SYNC WITH SALON SEARCH DATA
+    console.log('Automatically syncing with salon search data...');
+    try {
+      // Find the corresponding salon entry
+      const salonSnapshot = await db.collection('salons').where('ownerId', '==', userId).get();
+      
+      if (!salonSnapshot.empty) {
+        const salonDoc = salonSnapshot.docs[0];
+        const salonUpdateData = {};
+
+        // Map salon owner fields to salon fields
+        if (salonName) salonUpdateData.name = salonName.trim();
+        if (salonAddress) salonUpdateData.address = salonAddress.trim();
+        if (phoneNumber) salonUpdateData.phone = phoneNumber.trim();
+        if (email) salonUpdateData.email = email.trim();
+        if (city) salonUpdateData.city = city.trim();
+        if (state) salonUpdateData.state = state.trim();
+        if (pincode) salonUpdateData.pincode = pincode.trim();
+        if (servicesOffered) {
+          // Handle servicesOffered as either string or array
+          const servicesArray = Array.isArray(servicesOffered) 
+            ? servicesOffered 
+            : servicesOffered ? servicesOffered.split(',').map(s => s.trim()).filter(s => s) 
+            : [];
+
+          salonUpdateData.services = servicesArray.map(service => ({
+            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+            name: service,
+            description: service,
+            duration: 60,
+            price: 0,
+            category: 'general',
+            isActive: true,
+            createdAt: new Date()
+          }));
+          salonUpdateData.description = `Salon offering ${servicesArray.join(', ')}`;
+        }
+        if (openHours) salonUpdateData.workingHours = openHours;
+
+        if (Object.keys(salonUpdateData).length > 0) {
+          salonUpdateData.updatedAt = admin.firestore.FieldValue.serverTimestamp();
+          await db.collection('salons').doc(salonDoc.id).update(salonUpdateData);
+          console.log('✅ Salon search data updated automatically:', salonUpdateData);
+        }
+      } else {
+        console.log('⚠️ No corresponding salon found for owner:', userId);
+      }
+    } catch (syncError) {
+      console.error('❌ Error syncing with salon search data:', syncError);
+      // Don't fail the entire update if sync fails
+    }
+
     res.json({ 
-      message: 'Salon profile updated successfully',
+      message: 'Salon profile updated successfully and synced with search data',
       updatedData: updateData
     });
 

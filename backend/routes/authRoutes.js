@@ -191,7 +191,7 @@ router.post('/signup/salonOwner', async (req, res) => {
       role: role || 'salonOwner',
       isActive: true,
       isLive: false,
-      profileImage: null,
+      profileImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop", // Default profile image
       rating: 0,
       totalRatings: 0,
       location: {
@@ -236,7 +236,15 @@ router.post('/signup/salonOwner', async (req, res) => {
         saturday: { open: '10:00', close: '16:00', isOpen: true },
         sunday: { open: '10:00', close: '16:00', isOpen: false }
       },
-      images: [],
+      images: [
+        // Random salon images from Unsplash
+        "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop"
+      ],
+      profileImage: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop", // Default profile image
       isActive: true,
       isOpen: true,
       rating: 0,

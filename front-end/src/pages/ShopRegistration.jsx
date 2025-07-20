@@ -18,7 +18,6 @@ const ShopRegistration = () => {
     city: '',
     state: '',
     pincode: '',
-    profileImage: null,
     role: 'salonOwner',
   });
 
@@ -107,23 +106,9 @@ const ShopRegistration = () => {
         return;
       }
 
-      // If there's a profile image, handle file upload
-      if (form.profileImage) {
-        const formData = new FormData();
-        formData.append('profileImage', form.profileImage);
-        formData.append('data', JSON.stringify(registrationData));
-        
-        // You might need to adjust this based on your backend API
-        const response = await api.post('/auth/signup/salonOwner', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-      } else {
-        console.log('Calling signupSalonOwner with data:', registrationData);
-        const response = await signupSalonOwner(registrationData);
-        console.log('Signup response:', response);
-      }
+      console.log('Calling signupSalonOwner with data:', registrationData);
+      const response = await signupSalonOwner(registrationData);
+      console.log('Signup response:', response);
 
       setSuccess('Shop registration successful! Redirecting to your admin panel...');
       
@@ -141,7 +126,6 @@ const ShopRegistration = () => {
         city: '',
         state: '',
         pincode: '',
-        profileImage: null,
         role: 'salonOwner',
       });
 
@@ -313,31 +297,6 @@ const ShopRegistration = () => {
               value={form.openHours}
               onChange={handleChange}
             />
-          </div>
-
-          <div className="form-section">
-            <h3>Profile Image</h3>
-            <label className="shopreg-file-label">
-              Profile Image (optional)
-              <input
-                type="file"
-                name="profileImage"
-                accept="image/*"
-                onChange={handleChange}
-                id="shopreg-profile-image"
-              />
-              <span
-                className="shopreg-file-custom"
-                onClick={() => document.getElementById('shopreg-profile-image').click()}
-                tabIndex={0}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') document.getElementById('shopreg-profile-image').click(); }}
-              >
-                Choose File
-              </span>
-              {form.profileImage && (
-                <span style={{ marginTop: '0.3rem', color: '#3b82f6', fontSize: '0.95rem' }}>{form.profileImage.name}</span>
-              )}
-            </label>
           </div>
 
           <input

@@ -111,13 +111,22 @@ const AppointmentBooking = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
+        console.log('Page became visible, refreshing salon data...');
         fetchSalons();
       }
     };
 
+    // Refresh every 30 seconds to get latest data
+    const refreshInterval = setInterval(() => {
+      console.log('Auto-refreshing salon data...');
+      fetchSalons();
+    }, 30000);
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearInterval(refreshInterval);
     };
   }, []);
 

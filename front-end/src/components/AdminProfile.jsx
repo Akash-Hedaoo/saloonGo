@@ -205,43 +205,20 @@ const AdminProfile = () => {
       console.log('Auth token exists:', !!accessToken);
       console.log('Refresh token exists:', !!refreshToken);
 
-      // First, update the salon owner profile
+      // First, update the salon owner profile (this now automatically syncs with salon search data)
       const profileResponse = await userAPI.updateSalonProfile(formData);
       console.log('Profile update response:', profileResponse);
       
-      // Then, sync with salon search data
-      if (user?.userId || user?.id) {
-        const ownerId = user.userId || user.id;
-        console.log('Syncing with salon data for owner:', ownerId);
-        console.log('User object:', user);
-        console.log('Form data being synced:', formData);
-        
-        try {
-          const syncResponse = await salonAPI.updateSalonOwnerProfile(ownerId, formData);
-          console.log('Sync response:', syncResponse);
-        } catch (syncError) {
-          console.error('Sync error:', syncError);
-          console.error('Sync error response:', syncError.response?.data);
-          // Don't fail the entire save if sync fails
-          setError('Profile saved but failed to sync with search data. Please try again.');
-          return;
-        }
-      } else {
-        console.error('No user ID found for sync:', user);
-        setError('Profile saved but could not sync with search data due to missing user ID.');
-        return;
-      }
-      
       console.log('Profile saved successfully');
       setIsEditing(false);
-      setSuccess('Profile updated successfully! Your salon details have been updated in the search results. Please refresh the salon search page to see the changes.');
+      setSuccess('Profile updated successfully! Your salon details have been automatically updated in the search results.');
       
       // Refresh the profile data
       await fetchSalonProfile();
       
       // Show a longer success message with instructions
       setTimeout(() => {
-        setSuccess('Profile updated! Remember to refresh the salon search page to see your updated salon details.');
+        setSuccess('Profile updated! Your salon details are now live in the search results.');
       }, 5000);
       
       setTimeout(() => setSuccess(''), 10000);

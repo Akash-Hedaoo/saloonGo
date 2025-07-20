@@ -289,7 +289,11 @@ router.post('/test-create', async (req, res) => {
         saturday: { open: '10:00', close: '16:00', isOpen: true },
         sunday: { open: '10:00', close: '16:00', isOpen: false }
       },
-      images: [],
+      images: [
+        "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=400&h=300&fit=crop",
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=300&fit=crop"
+      ],
       isActive: true,
       isOpen: true,
       rating: 4.5,
@@ -372,6 +376,23 @@ router.get('/all', async (req, res) => {
 
     console.log('Returning salons:', paginatedSalons.length);
 
+    // If no salons found, provide helpful message
+    if (paginatedSalons.length === 0) {
+      console.log('No salons found in database');
+      return res.json({
+        success: true,
+        salons: [],
+        message: 'No salons found. Try registering a salon first.',
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages: 0,
+          totalSalons: 0,
+          hasNext: false,
+          hasPrev: false
+        }
+      });
+    }
+
     res.json({
       success: true,
       salons: paginatedSalons,
@@ -385,10 +406,17 @@ router.get('/all', async (req, res) => {
     });
   } catch (error) {
     console.error('Get all salons error:', error);
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack
+    });
+    
     res.status(500).json({
       success: false,
-      message: 'Failed to get salons',
-      error: error.message
+      message: 'Failed to get salons from database',
+      error: error.message,
+      details: 'Database connection or query error'
     });
   }
 });
