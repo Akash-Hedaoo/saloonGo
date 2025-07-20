@@ -58,6 +58,16 @@
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 16px rgba(59, 130, 246, 0.10);
   border: 5px solid #f3f4f6;
+  background: #f8fafc;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Special styling for SVG profile images */
+.team-photo[src*=".svg"] {
+  background: #f8fafc;
+  padding: 25px;
+  object-fit: contain;
 }
 
 .team-name {
@@ -103,18 +113,27 @@
   transform: scale(1.13);
 }
 
-.team-link.linkedin svg {
-  fill: #0a66c2;
-  stroke: #0a66c2;
-  background: none;
+.team-link.linkedin {
+  background: rgba(11, 134, 202, 0.10);
+  color: #0b86ca;
 }
-.team-link.linkedin svg rect {
-  fill: #0a66c2;
-  stroke: #0a66c2;
+
+.team-link.linkedin img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s;
 }
-.team-link.linkedin svg path {
-  stroke: #fff;
+
+/* .team-link.linkedin:hover {
+  background: #0b86ca;
+  color: #fff;
 }
+
+.team-link.linkedin:hover img {
+  filter: brightness(0) invert(1);
+  transform: scale(1.1);
+} */
+
 .team-link.instagram svg {
   stroke: #e1306c;
 }
