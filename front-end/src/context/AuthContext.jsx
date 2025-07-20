@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authAPI, setAuthTokens, clearAuthTokens, isAuthenticated } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -18,36 +17,38 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Dummy users for demo
+  const dummyUsers = {
+    customers: [
+      { email: 'john@example.com', password: 'Password123', name: 'John Doe', phone: '+1234567890', id: 'cust1', userType: 'customer' },
+      { email: 'jane@example.com', password: 'Password123', name: 'Jane Smith', phone: '+1234567891', id: 'cust2', userType: 'customer' },
+      { email: 'demo@customer.com', password: 'demo123', name: 'Demo Customer', phone: '+1234567892', id: 'cust3', userType: 'customer' }
+    ],
+    salonOwners: [
+      { email: 'salon@elite.com', password: 'Password123', name: 'Elite Beauty Salon', phone: '+1234567893', id: 'salon1', userType: 'salonOwner' },
+      { email: 'glamour@studio.com', password: 'Password123', name: 'Glamour Studio', phone: '+1234567894', id: 'salon2', userType: 'salonOwner' },
+      { email: 'demo@salon.com', password: 'demo123', name: 'Demo Salon', phone: '+1234567895', id: 'salon3', userType: 'salonOwner' }
+    ]
+  };
+
   // Check if user is authenticated on app load
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
         console.log('AuthContext: Checking authentication status...');
         
-        // For hackathon prototype, just check if we have tokens
-        const accessToken = localStorage.getItem('accessToken');
-        const refreshToken = localStorage.getItem('refreshToken');
+        // Check for stored user data
+        const storedUser = localStorage.getItem('user');
+        const storedToken = localStorage.getItem('accessToken');
         
-        if (accessToken && refreshToken) {
-          console.log('AuthContext: Tokens found, getting current user...');
-          try {
-            const response = await authAPI.getCurrentUser();
-            console.log('AuthContext: Current user response:', response.data);
-            setUser(response.data.user);
-          } catch (error) {
-            console.log('AuthContext: Could not get current user, using stored data');
-            // For hackathon, just use stored user data if available
-            const storedUser = localStorage.getItem('user');
-            if (storedUser) {
-              setUser(JSON.parse(storedUser));
-            }
-          }
+        if (storedUser && storedToken) {
+          console.log('AuthContext: Found stored user data');
+          setUser(JSON.parse(storedUser));
         } else {
-          console.log('AuthContext: No tokens found');
+          console.log('AuthContext: No stored user data found');
         }
       } catch (error) {
         console.error('AuthContext: Auth check failed:', error);
-        // Don't clear tokens for hackathon prototype
       } finally {
         setLoading(false);
       }
@@ -56,79 +57,91 @@ export const AuthProvider = ({ children }) => {
     checkAuthStatus();
   }, []);
 
-  // Customer signup
-  const signupCustomer = async (userData) => {
+  // Unified login function
+  const login = async (credentials) => {
     try {
       setError(null);
-      const response = await authAPI.signupCustomer(userData);
-      const { token, refreshToken, user } = response.data;
       
-      setAuthTokens(token, refreshToken);
-      setUser(user);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      return { success: true, user };
+      const { email, password, userType } = credentials;
+      const users = userType === 'customer' ? dummyUsers.customers : dummyUsers.salonOwners;
+      
+      const foundUser = users.find(user => 
+        user.email === email && user.password === password
+      );
+      
+      if (foundUser) {
+        // Create a token (in real app, this would come from server)
+        const token = `dummy_token_${Date.now()}`;
+        const refreshToken = `dummy_refresh_${Date.now()}`;
+        
+        // Store tokens and user data
+        localStorage.setItem('accessToken', token);
+        localStorage.setItem('refreshToken', refreshToken);
+        localStorage.setItem('user', JSON.stringify(foundUser));
+        
+        setUser(foundUser);
+        
+        return { success: true, user: foundUser };
+      } else {
+        setError('Invalid email or password');
+        return { success: false, error: 'Invalid email or password' };
+      }
     } catch (error) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Signup failed';
+      const errorMessage = 'Login failed. Please try again.';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
   };
 
-  // Salon owner signup
-  const signupSalonOwner = async (userData) => {
+  // Unified signup function
+  const signup = async (userData) => {
     try {
       setError(null);
-      const response = await authAPI.signupSalonOwner(userData);
-      const { token, refreshToken, salon } = response.data;
       
-      setAuthTokens(token, refreshToken);
-      setUser(salon);
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Store user data in localStorage for hackathon prototype
-      localStorage.setItem('user', JSON.stringify(salon));
+      const { email, password, name, phone, userType } = userData;
+      const users = userType === 'customer' ? dummyUsers.customers : dummyUsers.salonOwners;
       
-      return { success: true, user: salon };
+      // Check if user already exists
+      const existingUser = users.find(user => user.email === email);
+      if (existingUser) {
+        setError('User with this email already exists');
+        return { success: false, error: 'User with this email already exists' };
+      }
+      
+      // Create new user
+      const newUser = {
+        id: `${userType === 'customer' ? 'cust' : 'salon'}${Date.now()}`,
+        email,
+        password,
+        name,
+        phone,
+        userType,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Add to dummy users (in real app, this would be saved to database)
+      users.push(newUser);
+      
+      // Create tokens
+      const token = `dummy_token_${Date.now()}`;
+      const refreshToken = `dummy_refresh_${Date.now()}`;
+      
+      // Store tokens and user data
+      localStorage.setItem('accessToken', token);
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      
+      setUser(newUser);
+      
+      return { success: true, user: newUser };
     } catch (error) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Signup failed';
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  };
-
-  // Customer login
-  const loginCustomer = async (credentials) => {
-    try {
-      setError(null);
-      const response = await authAPI.loginCustomer(credentials);
-      const { token, refreshToken, user } = response.data;
-      
-      setAuthTokens(token, refreshToken);
-      setUser(user);
-      
-      return { success: true, user };
-    } catch (error) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Login failed';
-      setError(errorMessage);
-      return { success: false, error: errorMessage };
-    }
-  };
-
-  // Salon owner login
-  const loginSalonOwner = async (credentials) => {
-    try {
-      setError(null);
-      const response = await authAPI.loginSalonOwner(credentials);
-      const { token, refreshToken, salon } = response.data;
-      
-      setAuthTokens(token, refreshToken);
-      setUser(salon);
-      
-      // Store user data in localStorage for hackathon prototype
-      localStorage.setItem('user', JSON.stringify(salon));
-      
-      return { success: true, user: salon };
-    } catch (error) {
-      const errorMessage = error.response?.data?.error || error.response?.data?.message || 'Login failed';
+      const errorMessage = 'Signup failed. Please try again.';
       setError(errorMessage);
       return { success: false, error: errorMessage };
     }
@@ -137,12 +150,15 @@ export const AuthProvider = ({ children }) => {
   // Logout
   const logout = async () => {
     try {
-      await authAPI.logout();
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       console.error('Logout error:', error);
     } finally {
-      clearAuthTokens();
-      localStorage.removeItem('user'); // Clear stored user data
+      // Clear all stored data
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
       setUser(null);
       setError(null);
     }
@@ -153,16 +169,20 @@ export const AuthProvider = ({ children }) => {
     setError(null);
   };
 
+  // Get current user (for API compatibility)
+  const getCurrentUser = () => {
+    return user;
+  };
+
   const value = {
     user,
     loading,
     error,
-    signupCustomer,
-    signupSalonOwner,
-    loginCustomer,
-    loginSalonOwner,
+    login,
+    signup,
     logout,
     clearError,
+    getCurrentUser,
     isAuthenticated: !!user,
   };
 

@@ -17,7 +17,21 @@ const Auth = ({ initialMode = 'login', standalone }) => {
   
   const navigate = useNavigate();
   const location = useLocation();
-  const { signupCustomer, signupSalonOwner, loginCustomer, loginSalonOwner, error, clearError } = useAuth();
+  const { login, signup, error, clearError } = useAuth();
+
+  // Dummy users for demo
+  const dummyUsers = {
+    customers: [
+      { email: 'john@example.com', password: 'Password123', name: 'John Doe', phone: '+1234567890', id: 'cust1' },
+      { email: 'jane@example.com', password: 'Password123', name: 'Jane Smith', phone: '+1234567891', id: 'cust2' },
+      { email: 'demo@customer.com', password: 'demo123', name: 'Demo Customer', phone: '+1234567892', id: 'cust3' }
+    ],
+    salonOwners: [
+      { email: 'salon@elite.com', password: 'Password123', name: 'Elite Beauty Salon', phone: '+1234567893', id: 'salon1' },
+      { email: 'glamour@studio.com', password: 'Password123', name: 'Glamour Studio', phone: '+1234567894', id: 'salon2' },
+      { email: 'demo@salon.com', password: 'demo123', name: 'Demo Salon', phone: '+1234567895', id: 'salon3' }
+    ]
+  };
 
   // Clear error when component mounts or form changes
   useEffect(() => {
@@ -57,41 +71,52 @@ const Auth = ({ initialMode = 'login', standalone }) => {
     }
 
     try {
-      let userData;
-      if (formData.userType === 'customer') {
-        userData = {
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-          phone: formData.phone
-        };
-      } else {
-        userData = {
-          fullName: formData.name,
-          email: formData.email,
-          password: formData.password,
-          salonName: formData.name + "'s Salon", // Default salon name
-          salonAddress: "Address to be updated",
-          phoneNumber: formData.phone,
-          servicesOffered: ["Haircut", "Styling"], // Default services
-          role: 'salonOwner'
-        };
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Check if user already exists
+      const existingUsers = formData.userType === 'customer' ? dummyUsers.customers : dummyUsers.salonOwners;
+      const existingUser = existingUsers.find(user => user.email === formData.email);
+      
+      if (existingUser) {
+        alert('User with this email already exists. Please use a different email or try logging in.');
+        setIsLoading(false);
+        return;
       }
 
-      let result;
+      // Create new user
+      const newUser = {
+        id: `${formData.userType === 'customer' ? 'cust' : 'salon'}${Date.now()}`,
+        email: formData.email,
+        password: formData.password,
+        name: formData.name,
+        phone: formData.phone,
+        userType: formData.userType,
+        createdAt: new Date().toISOString()
+      };
+
+      // Add to dummy users (in real app, this would be saved to database)
       if (formData.userType === 'customer') {
-        result = await signupCustomer(userData);
+        dummyUsers.customers.push(newUser);
       } else {
-        result = await signupSalonOwner(userData);
+        dummyUsers.salonOwners.push(newUser);
       }
 
-      if (result.success) {
-        // Redirect to appropriate page based on user type
+      // Login the new user
+      const loginResult = await login({
+        email: formData.email,
+        password: formData.password,
+        userType: formData.userType
+      });
+
+      if (loginResult.success) {
+        alert(`Welcome ${formData.name}! Your account has been created successfully.`);
         const from = location.state?.from?.pathname || '/';
         navigate(from, { replace: true });
       }
     } catch (error) {
       console.error('Signup error:', error);
+      alert('Signup failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -102,27 +127,43 @@ const Auth = ({ initialMode = 'login', standalone }) => {
     setIsLoading(true);
 
     try {
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
       const credentials = {
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        userType: formData.userType
       };
 
-      let result;
-      if (formData.userType === 'customer') {
-        result = await loginCustomer(credentials);
-      } else {
-        result = await loginSalonOwner(credentials);
-      }
+      const result = await login(credentials);
 
       if (result.success) {
-        // Redirect to appropriate page based on user type
+        alert(`Welcome back, ${result.user.name}!`);
         const from = location.state?.from?.pathname || '/';
         navigate(from, { replace: true });
+      } else {
+        alert('Invalid email or password. Please try again.');
       }
     } catch (error) {
       console.error('Login error:', error);
+      alert('Login failed. Please try again.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDemoLogin = (userType) => {
+    const demoUsers = userType === 'customer' ? dummyUsers.customers : dummyUsers.salonOwners;
+    const demoUser = demoUsers.find(user => user.email.includes('demo'));
+    
+    if (demoUser) {
+      setFormData({
+        ...formData,
+        userType: userType,
+        email: demoUser.email,
+        password: demoUser.password
+      });
     }
   };
 
@@ -148,34 +189,40 @@ const Auth = ({ initialMode = 'login', standalone }) => {
 
         <div className="auth-form-container auth-sign-up-container">
           <form className="auth-form" onSubmit={handleSignup}>
+            <h2>Create Account</h2>
+            
             {/* User Type Selection */}
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="customer"
-                checked={formData.userType === 'customer'}
-                onChange={handleInputChange}
-              />
-              Customer
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="salonOwner"
-                checked={formData.userType === 'salonOwner'}
-                onChange={handleInputChange}
-              />
-              Salon Owner
-            </label>
+            <div className="user-type-selection">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="userType"
+                  value="customer"
+                  checked={formData.userType === 'customer'}
+                  onChange={handleInputChange}
+                />
+                <span className="radio-custom"></span>
+                Customer
+              </label>
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="userType"
+                  value="salonOwner"
+                  checked={formData.userType === 'salonOwner'}
+                  onChange={handleInputChange}
+                />
+                <span className="radio-custom"></span>
+                Salon Owner
+              </label>
+            </div>
 
             <span>Create your account</span>
             
             <input
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder={formData.userType === 'customer' ? "Full Name" : "Salon Name"}
               value={formData.name}
               onChange={handleInputChange}
               required
@@ -218,32 +265,57 @@ const Auth = ({ initialMode = 'login', standalone }) => {
             <button type="submit" className="auth-btn" disabled={isLoading}>
               {isLoading ? 'Signing Up...' : 'Sign Up'}
             </button>
+
+            {/* Demo Login Buttons */}
+            <div className="demo-login-section">
+              <p>Try demo accounts:</p>
+              <button 
+                type="button" 
+                className="demo-btn customer"
+                onClick={() => handleDemoLogin('customer')}
+              >
+                Demo Customer
+              </button>
+              <button 
+                type="button" 
+                className="demo-btn salon"
+                onClick={() => handleDemoLogin('salonOwner')}
+              >
+                Demo Salon
+              </button>
+            </div>
           </form>
         </div>
         
         <div className="auth-form-container auth-sign-in-container">
           <form className="auth-form" onSubmit={handleLogin}>
+            <h2>Sign In</h2>
+            
             {/* User Type Selection */}
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="customer"
-                checked={formData.userType === 'customer'}
-                onChange={handleInputChange}
-              />
-              Customer
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="userType"
-                value="salonOwner"
-                checked={formData.userType === 'salonOwner'}
-                onChange={handleInputChange}
-              />
-              Salon Owner
-            </label>
+            <div className="user-type-selection">
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="userType"
+                  value="customer"
+                  checked={formData.userType === 'customer'}
+                  onChange={handleInputChange}
+                />
+                <span className="radio-custom"></span>
+                Customer
+              </label>
+              <label className="radio-label">
+                <input
+                  type="radio"
+                  name="userType"
+                  value="salonOwner"
+                  checked={formData.userType === 'salonOwner'}
+                  onChange={handleInputChange}
+                />
+                <span className="radio-custom"></span>
+                Salon Owner
+              </label>
+            </div>
 
             <span>Sign in to your account</span>
             
@@ -263,24 +335,52 @@ const Auth = ({ initialMode = 'login', standalone }) => {
               onChange={handleInputChange}
               required
             />
-            <a href="#">Forgot your password?</a>
             <button type="submit" className="auth-btn" disabled={isLoading}>
               {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
+
+            {/* Demo Login Buttons */}
+            <div className="demo-login-section">
+              <p>Try demo accounts:</p>
+              <button 
+                type="button" 
+                className="demo-btn customer"
+                onClick={() => handleDemoLogin('customer')}
+              >
+                Demo Customer
+              </button>
+              <button 
+                type="button" 
+                className="demo-btn salon"
+                onClick={() => handleDemoLogin('salonOwner')}
+              >
+                Demo Salon
+              </button>
+            </div>
           </form>
         </div>
-        
+
         <div className="auth-overlay-container">
           <div className="auth-overlay">
             <div className="auth-overlay-panel auth-overlay-left">
-              <h1>Welcome Back!</h1>
+              <h2>Welcome Back!</h2>
               <p>To keep connected with us please login with your personal info</p>
-              <button className="ghost auth-slider-btn" onClick={() => setRightPanelActive(false)}>Sign In</button>
+              <button 
+                className="auth-ghost auth-btn" 
+                onClick={() => setRightPanelActive(false)}
+              >
+                Sign In
+              </button>
             </div>
             <div className="auth-overlay-panel auth-overlay-right">
-              <h1>Hello, Friend!</h1>
+              <h2>Hello, Friend!</h2>
               <p>Enter your personal details and start journey with us</p>
-              <button className="ghost auth-slider-btn" onClick={() => setRightPanelActive(true)}>Sign Up</button>
+              <button 
+                className="auth-ghost auth-btn" 
+                onClick={() => setRightPanelActive(true)}
+              >
+                Sign Up
+              </button>
             </div>
           </div>
         </div>

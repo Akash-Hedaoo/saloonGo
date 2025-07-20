@@ -1,176 +1,388 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../styles/FilterSidebar.css';
 
-const FilterSidebar = ({ inlineToggle }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [filters, setFilters] = useState({
-    rating: '',
-    acSalon: false,
-    distance: '',
-    availability: ''
-  });
+const FilterSidebar = ({ filters, onFilterChange, inlineToggle = false }) => {
+  const [isExpanded, setIsExpanded] = useState(!inlineToggle);
+  const [showFilters, setShowFilters] = useState(false);
+  const filterRef = useRef(null);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  const availableServices = [
+    "Haircut",
+    "Hair Coloring",
+    "Hair Styling",
+    "Hair Treatment",
+    "Beard Trim",
+    "Facial",
+    "Manicure",
+    "Pedicure",
+    "Waxing",
+    "Massage",
+    "Body Care",
+    "Hair Extensions"
+  ];
 
-  const handleFilterChange = (filterType, value) => {
-    setFilters(prev => ({
-      ...prev,
-      [filterType]: value
-    }));
-  };
+  // Click outside handler for inline filter dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (filterRef.current && !filterRef.current.contains(event.target)) {
+        setShowFilters(false);
+      }
+    };
 
-  const clearFilters = () => {
-    setFilters({
-      rating: '',
-      acSalon: false,
-      distance: '',
-      availability: ''
+    if (inlineToggle && showFilters) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [inlineToggle, showFilters]);
+
+  const handleServiceToggle = (service) => {
+    const newServices = filters.services.includes(service)
+      ? filters.services.filter(s => s !== service)
+      : [...filters.services, service];
+    
+    onFilterChange({
+      ...filters,
+      services: newServices
     });
   };
 
-  const applyFilters = () => {
-    console.log('Applied filters:', filters);
-    // TODO: Implement filter logic
+  const handleRatingChange = (rating) => {
+    onFilterChange({
+      ...filters,
+      rating: rating
+    });
   };
 
+  const handlePriceRangeChange = (priceRange) => {
+    onFilterChange({
+      ...filters,
+      priceRange: priceRange
+    });
+  };
+
+  const handleDistanceChange = (distance) => {
+    onFilterChange({
+      ...filters,
+      distance: distance
+    });
+  };
+
+  const clearAllFilters = () => {
+    onFilterChange({
+      services: [],
+      rating: 0,
+      priceRange: 'all',
+      distance: 'all'
+    });
+  };
+
+  const hasActiveFilters = filters.services.length > 0 || 
+                          filters.rating > 0 || 
+                          filters.priceRange !== 'all' || 
+                          filters.distance !== 'all';
+
+  // If inlineToggle is true, render a compact filter button
+  if (inlineToggle) {
+    return (
+      <div className="filter-sidebar-inline" ref={filterRef}>
+        <button 
+          className="filter-toggle-btn inline"
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46"></polygon>
+          </svg>
+          Filters
+          {hasActiveFilters && <span className="filter-badge">{Object.values(filters).filter(v => v !== 'all' && v !== 0 && (Array.isArray(v) ? v.length > 0 : true)).length}</span>}
+        </button>
+        
+        {showFilters && (
+          <div className="filter-dropdown">
+            <div className="filter-dropdown-content">
+              {/* Services Filter */}
+              <div className="filter-section">
+                <h4 className="filter-title">Services</h4>
+                <div className="services-grid">
+                  {availableServices.map(service => (
+                    <label key={service} className="service-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={filters.services.includes(service)}
+                        onChange={() => handleServiceToggle(service)}
+                      />
+                      <span className="checkbox-custom"></span>
+                      <span className="service-label">{service}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="filter-section">
+                <h4 className="filter-title">Minimum Rating</h4>
+                <div className="rating-filter">
+                  {[4.5, 4.0, 3.5, 3.0, 0].map(rating => (
+                    <label key={rating} className="rating-option">
+                      <input
+                        type="radio"
+                        name="rating"
+                        checked={filters.rating === rating}
+                        onChange={() => handleRatingChange(rating)}
+                      />
+                      <span className="rating-custom">
+                        {rating === 0 ? 'Any' : `${rating}+`}
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range Filter */}
+              <div className="filter-section">
+                <h4 className="filter-title">Price Range</h4>
+                <div className="price-filter">
+                  {[
+                    { value: 'all', label: 'Any Price' },
+                    { value: '$', label: 'Budget ($)' },
+                    { value: '$$', label: 'Moderate ($$)' },
+                    { value: '$$$', label: 'Premium ($$$)' },
+                    { value: '$$$$', label: 'Luxury ($$$$)' }
+                  ].map(option => (
+                    <label key={option.value} className="price-option">
+                      <input
+                        type="radio"
+                        name="priceRange"
+                        checked={filters.priceRange === option.value}
+                        onChange={() => handlePriceRangeChange(option.value)}
+                      />
+                      <span className="price-custom">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Distance Filter */}
+              <div className="filter-section">
+                <h4 className="filter-title">Distance</h4>
+                <div className="distance-filter">
+                  {[
+                    { value: 'all', label: 'Any Distance' },
+                    { value: '1km', label: 'Within 1 km' },
+                    { value: '2km', label: 'Within 2 km' },
+                    { value: '5km', label: 'Within 5 km' },
+                    { value: '10km', label: 'Within 10 km' }
+                  ].map(option => (
+                    <label key={option.value} className="distance-option">
+                      <input
+                        type="radio"
+                        name="distance"
+                        checked={filters.distance === option.value}
+                        onChange={() => handleDistanceChange(option.value)}
+                      />
+                      <span className="distance-custom">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clear Filters */}
+              {hasActiveFilters && (
+                <div className="filter-actions">
+                  <button 
+                    className="clear-filters-btn"
+                    onClick={clearAllFilters}
+                  >
+                    Clear All Filters
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Regular sidebar filter
   return (
-    <>
-      {/* Toggle Button */}
-      <button 
-        className={`filter-toggle-btn${inlineToggle ? ' inline' : ''}${isOpen ? ' active' : ''}`}
-        onClick={toggleSidebar}
-        aria-label="Toggle filters"
-        type="button"
-        style={inlineToggle ? { position: 'static', marginLeft: '12px' } : {}}
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46 22,3"/>
-        </svg>
-        <span>Filters</span>
-      </button>
+    <div className="filter-sidebar">
+      <div className="filter-header">
+        <h3>Filters</h3>
+        <button 
+          className="expand-toggle"
+          onClick={() => setIsExpanded(!isExpanded)}
+        >
+          <svg 
+            width="16" 
+            height="16" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+            style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+          >
+            <polyline points="6,9 12,15 18,9"></polyline>
+          </svg>
+        </button>
+      </div>
 
-      {/* Overlay */}
-      {isOpen && (
-        <div className="filter-overlay" onClick={toggleSidebar}></div>
-      )}
+      {isExpanded && (
+        <>
+          {hasActiveFilters && (
+            <div className="filter-actions">
+              <button 
+                className="clear-filters-btn"
+                onClick={clearAllFilters}
+              >
+                Clear All Filters
+              </button>
+            </div>
+          )}
 
-      {/* Sidebar */}
-      <div className={`filter-sidebar ${isOpen ? 'open' : ''}`}>
-        <div className="filter-header">
-          <h3>Filters</h3>
-          <button className="close-btn" onClick={toggleSidebar} type="button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-
-        <div className="filter-content">
-          {/* Rating Filter */}
+          {/* Services Filter */}
           <div className="filter-section">
-            <h4 className="filter-title">Rating</h4>
-            <div className="rating-options">
-              {[5, 4, 3, 2, 1].map(rating => (
-                <label key={rating} className="rating-option">
+            <h4 className="filter-title">Services</h4>
+            <div className="services-grid">
+              {availableServices.map(service => (
+                <label key={service} className="service-checkbox">
                   <input
-                    type="radio"
-                    name="rating"
-                    value={rating}
-                    checked={filters.rating === rating.toString()}
-                    onChange={(e) => handleFilterChange('rating', e.target.value)}
+                    type="checkbox"
+                    checked={filters.services.includes(service)}
+                    onChange={() => handleServiceToggle(service)}
                   />
-                  <span className="rating-stars">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} width="16" height="16" viewBox="0 0 24 24" fill={i < rating ? "currentColor" : "none"} stroke="currentColor" strokeWidth="1">
-                        <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/>
-                      </svg>
-                    ))}
-                  </span>
-                  <span className="rating-text">{rating}+ Stars</span>
+                  <span className="checkbox-custom"></span>
+                  <span className="service-label">{service}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* AC Salon Filter */}
+          {/* Rating Filter */}
           <div className="filter-section">
-            <h4 className="filter-title">AC Salon</h4>
-            <label className="checkbox-option">
-              <input
-                type="checkbox"
-                checked={filters.acSalon}
-                onChange={(e) => handleFilterChange('acSalon', e.target.checked)}
-              />
-              <span className="checkmark"></span>
-              <span>Air Conditioned Salons Only</span>
-            </label>
+            <h4 className="filter-title">Minimum Rating</h4>
+            <div className="rating-filter">
+              {[4.5, 4.0, 3.5, 3.0, 0].map(rating => (
+                <label key={rating} className="rating-option">
+                  <input
+                    type="radio"
+                    name="rating"
+                    checked={filters.rating === rating}
+                    onChange={() => handleRatingChange(rating)}
+                  />
+                  <span className="rating-custom">
+                    {rating === 0 ? 'Any' : `${rating}+`}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Price Range Filter */}
+          <div className="filter-section">
+            <h4 className="filter-title">Price Range</h4>
+            <div className="price-filter">
+              {[
+                { value: 'all', label: 'Any Price' },
+                { value: '$', label: 'Budget ($)' },
+                { value: '$$', label: 'Moderate ($$)' },
+                { value: '$$$', label: 'Premium ($$$)' },
+                { value: '$$$$', label: 'Luxury ($$$$)' }
+              ].map(option => (
+                <label key={option.value} className="price-option">
+                  <input
+                    type="radio"
+                    name="priceRange"
+                    checked={filters.priceRange === option.value}
+                    onChange={() => handlePriceRangeChange(option.value)}
+                  />
+                  <span className="price-custom">{option.label}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           {/* Distance Filter */}
           <div className="filter-section">
             <h4 className="filter-title">Distance</h4>
-            <div className="distance-options">
+            <div className="distance-filter">
               {[
-                { value: '1', label: 'Within 1 km' },
-                { value: '3', label: 'Within 3 km' },
-                { value: '5', label: 'Within 5 km' },
-                { value: '10', label: 'Within 10 km' }
+                { value: 'all', label: 'Any Distance' },
+                { value: '1km', label: 'Within 1 km' },
+                { value: '2km', label: 'Within 2 km' },
+                { value: '5km', label: 'Within 5 km' },
+                { value: '10km', label: 'Within 10 km' }
               ].map(option => (
-                <label key={option.value} className="radio-option">
+                <label key={option.value} className="distance-option">
                   <input
                     type="radio"
                     name="distance"
-                    value={option.value}
                     checked={filters.distance === option.value}
-                    onChange={(e) => handleFilterChange('distance', e.target.value)}
+                    onChange={() => handleDistanceChange(option.value)}
                   />
-                  <span className="radio-checkmark"></span>
-                  <span>{option.label}</span>
+                  <span className="distance-custom">{option.label}</span>
                 </label>
               ))}
             </div>
           </div>
 
-          {/* Availability Filter */}
-          <div className="filter-section">
-            <h4 className="filter-title">Availability</h4>
-            <div className="availability-options">
-              {[
-                { value: 'today', label: 'Available Today' },
-                { value: 'tomorrow', label: 'Available Tomorrow' },
-                { value: 'week', label: 'This Week' },
-                { value: 'anytime', label: 'Any Time' }
-              ].map(option => (
-                <label key={option.value} className="radio-option">
-                  <input
-                    type="radio"
-                    name="availability"
-                    value={option.value}
-                    checked={filters.availability === option.value}
-                    onChange={(e) => handleFilterChange('availability', e.target.value)}
-                  />
-                  <span className="radio-checkmark"></span>
-                  <span>{option.label}</span>
-                </label>
-              ))}
+          {/* Active Filters Summary */}
+          {hasActiveFilters && (
+            <div className="active-filters">
+              <h4 className="filter-title">Active Filters</h4>
+              <div className="active-filters-list">
+                {filters.services.map(service => (
+                  <span key={service} className="active-filter-tag">
+                    {service}
+                    <button 
+                      onClick={() => handleServiceToggle(service)}
+                      className="remove-filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+                {filters.rating > 0 && (
+                  <span className="active-filter-tag">
+                    {filters.rating}+ Rating
+                    <button 
+                      onClick={() => handleRatingChange(0)}
+                      className="remove-filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filters.priceRange !== 'all' && (
+                  <span className="active-filter-tag">
+                    {filters.priceRange} Price
+                    <button 
+                      onClick={() => handlePriceRangeChange('all')}
+                      className="remove-filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {filters.distance !== 'all' && (
+                  <span className="active-filter-tag">
+                    {filters.distance} Distance
+                    <button 
+                      onClick={() => handleDistanceChange('all')}
+                      className="remove-filter"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* Filter Actions */}
-        <div className="filter-actions">
-          <button className="clear-filters-btn" onClick={clearFilters} type="button">
-            Clear All
-          </button>
-          <button className="apply-filters-btn" onClick={applyFilters} type="button">
-            Apply Filters
-          </button>
-        </div>
-      </div>
-    </>
+          )}
+        </>
+      )}
+    </div>
   );
 };
 

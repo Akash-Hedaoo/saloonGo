@@ -14,6 +14,12 @@ const AppointmentBooking = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [filters, setFilters] = useState({
+    services: [],
+    rating: 0,
+    priceRange: 'all',
+    distance: 'all'
+  });
 
   // Mock data for testing when backend is not available
   const mockSalons = [
@@ -132,7 +138,7 @@ const AppointmentBooking = () => {
 
   useEffect(() => {
     filterSalons();
-  }, [salons, searchTerm]);
+  }, [salons, searchTerm, filters]);
 
   const fetchSalons = async () => {
     try {
@@ -201,6 +207,48 @@ const AppointmentBooking = () => {
       );
     }
 
+    // Filter by services
+    if (filters.services.length > 0) {
+      filtered = filtered.filter(salon =>
+        salon.services.some(service =>
+          filters.services.includes(service.name)
+        )
+      );
+    }
+
+    // Filter by rating
+    if (filters.rating > 0) {
+      filtered = filtered.filter(salon => salon.rating >= filters.rating);
+    }
+
+    // Filter by price range
+    if (filters.priceRange !== 'all') {
+      filtered = filtered.filter(salon => {
+        const avgPrice = salon.services.reduce((sum, service) => sum + service.price, 0) / salon.services.length;
+        switch (filters.priceRange) {
+          case '$': return avgPrice <= 500;
+          case '$$': return avgPrice > 500 && avgPrice <= 1000;
+          case '$$$': return avgPrice > 1000 && avgPrice <= 2000;
+          case '$$$$': return avgPrice > 2000;
+          default: return true;
+        }
+      });
+    }
+
+    // Filter by distance
+    if (filters.distance !== 'all') {
+      filtered = filtered.filter(salon => {
+        const distanceNum = parseFloat(salon.distance);
+        switch (filters.distance) {
+          case '1km': return distanceNum <= 1;
+          case '2km': return distanceNum <= 2;
+          case '5km': return distanceNum <= 5;
+          case '10km': return distanceNum <= 10;
+          default: return true;
+        }
+      });
+    }
+
     setFilteredSalons(filtered);
   };
 
@@ -237,7 +285,7 @@ const AppointmentBooking = () => {
           'Content-Type': 'application/json',
         }
       });
-      
+
       const result = await response.json();
       console.log('Test salon creation result:', result);
       
@@ -261,6 +309,10 @@ const AppointmentBooking = () => {
     setSearchTerm(e.target.value);
   };
 
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+  };
+
   if (loading) {
     return (
       <div className="appointment-booking-root">
@@ -282,9 +334,13 @@ const AppointmentBooking = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <FilterSidebar inlineToggle />
+        <FilterSidebar 
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          inlineToggle={true}
+        />
       </div>
-      
+
       <div className="appointment-booking-container">
         <div className="appointment-booking-header">
           <h1>Find Your Perfect Salon</h1>
